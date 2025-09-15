@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnModuleMapper">
+
+    <resultMap type="JhcnModule" id="JhcnModuleResult">
+        <result property="id"    column="id"    />
+        <result property="module"    column="module"    />
+        <result property="specificationId"    column="specification_id"    />
+        <result property="num"    column="num"    />
+        <result property="bindedNum"    column="binded_num"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="specification"    column="specification"    />
+        <result property="specificationNum"    column="specificationNum"    />
+    </resultMap>
+
+    <sql id="selectJhcnModuleVo">
+        select
+            m.id,
+            `module`,
+            specification_id,
+            m.num,
+            m.binded_num,
+            m.create_time,
+            m.update_time,
+            s.specification as specification,
+            s.num as specificationNum
+        from jhcn_module m
+                 left join jhcn_specification s
+                           on m.specification_id = s.id
+    </sql>
+
+    <select id="selectJhcnModuleList" parameterType="JhcnModule" resultMap="JhcnModuleResult">
+        <include refid="selectJhcnModuleVo"/>
+        <where>
+            <if test="specificationId != null "> and m.specification_id = #{specificationId}</if>
+            <if test="module != null "> and m.module like concat('%',#{module},'%')</if>
+            <if test="num != null "> and m.num = #{num}</if>
+        </where>
+    </select>
+
+    <select id="selectJhcnModuleById" parameterType="Long" resultMap="JhcnModuleResult">
+        <include refid="selectJhcnModuleVo"/>
+        where m.id = #{id}
+    </select>
+
+    <insert id="insertJhcnModule" parameterType="JhcnModule" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_module
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="module != null">`module`,</if>
+            <if test="specificationId != null">specification_id,</if>
+            <if test="num != null">num,</if>
+            <if test="bindedNum != null">bindedNum,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="module != null">#{module},</if>
+            <if test="specificationId != null">#{specificationId},</if>
+            <if test="num != null">#{num},</if>
+            <if test="bindedNum != null">#{bindedNum},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnModule" parameterType="JhcnModule">
+        update jhcn_module
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="module != null">`module` = #{module},</if>
+            <if test="specificationId != null">specification_id = #{specificationId},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="bindedNum != null">binded_num = #{bindedNum},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnModuleById" parameterType="Long">
+        delete from jhcn_module where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnModuleByIds" parameterType="String">
+        delete from jhcn_module where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

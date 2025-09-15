@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>邮件模板</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .content {
+            margin-bottom: 20px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1 th:text="${title}">邮件标题</h1>
+    </div>
+    <div class="content">
+        <p th:text="${content}">邮件内容</p>
+        <!-- 远程图片示例 -->
+        <img th:src="${imageUrl}" alt="远程图片" style="max-width:100%;">
+    </div>
+    <div class="footer">
+        <p>此邮件由系统自动发送，请勿直接回复</p>
+    </div>
+</div>
+</body>
+</html>

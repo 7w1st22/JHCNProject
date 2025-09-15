@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnDtLibraryMapper">
+
+    <resultMap type="JhcnDtLibrary" id="JhcnDtLibraryResult">
+        <result property="id"    column="id"    />
+        <result property="dtCode"    column="dt_code"    />
+        <result property="level"    column="level"    />
+        <result property="capacitance"    column="capacitance"    />
+        <result property="resistanc"    column="resistanc"    />
+        <result property="description"    column="description"    />
+        <result property="importTime"    column="import_time"    />
+        <result property="bindedTime"    column="binded_time"    />
+    </resultMap>
+
+    <sql id="selectJhcnDtLibraryVo">
+        select id, dt_code, level, capacitance, resistanc, description, import_time, binded_time from jhcn_dt_library
+    </sql>
+
+    <select id="selectJhcnDtLibraryList" parameterType="JhcnDtLibrary" resultMap="JhcnDtLibraryResult">
+        <include refid="selectJhcnDtLibraryVo"/>
+        <where>
+            <if test="dtCode != null  and dtCode != ''"> and dt_code like concat('%', #{dtCode}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectJhcnDtLibraryById" parameterType="Long" resultMap="JhcnDtLibraryResult">
+        <include refid="selectJhcnDtLibraryVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectJhcnDtLibraryByDtCode" parameterType="String" resultMap="JhcnDtLibraryResult">
+        <include refid="selectJhcnDtLibraryVo"/>
+        where dt_code = #{dtCode}
+    </select>
+
+    <insert id="insertJhcnDtLibrary" parameterType="JhcnDtLibrary" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_dt_library
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dtCode != null and dtCode != ''">dt_code,</if>
+            <if test="level != null">`level`,</if>
+            <if test="capacitance != null">capacitance,</if>
+            <if test="resistanc != null">resistanc,</if>
+            <if test="description != null">description,</if>
+            <if test="importTime != null">import_time,</if>
+            <if test="bindedTime != null">binded_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dtCode != null and dtCode != ''">#{dtCode},</if>
+            <if test="level != null">#{level},</if>
+            <if test="capacitance != null">#{capacitance},</if>
+            <if test="resistanc != null">#{resistanc},</if>
+            <if test="description != null">#{description},</if>
+            <if test="importTime != null">#{importTime},</if>
+            <if test="bindedTime != null">#{bindedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnDtLibrary" parameterType="JhcnDtLibrary">
+        update jhcn_dt_library
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dtCode != null and dtCode != ''">dt_code = #{dtCode},</if>
+            <if test="level != null">`level` = #{level},</if>
+            <if test="capacitance != null">capacitance = #{capacitance},</if>
+            <if test="resistanc != null">resistanc = #{resistanc},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="importTime != null">import_time = #{importTime},</if>
+            <if test="bindedTime != null">binded_time = #{bindedTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="resetJhcnDtLibraryBindedTimeById" parameterType="Long">
+        update jhcn_dt_library set binded_time = null where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnDtLibraryById" parameterType="Long">
+        delete from jhcn_dt_library where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnDtLibraryByIds" parameterType="String">
+        delete from jhcn_dt_library where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

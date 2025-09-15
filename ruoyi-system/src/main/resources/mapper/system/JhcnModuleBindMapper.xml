@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnModuleBindMapper">
+
+    <resultMap type="JhcnModuleBind" id="JhcnModuleBindResult">
+        <result property="id"    column="id"    />
+        <result property="moduleId"    column="module_id"    />
+        <result property="dtId"    column="dt_id"    />
+        <result property="bzCode"    column="bz_code"    />
+        <result property="bindTime"    column="bind_time"    />
+        <result property="delFlag"    column="del_flag"    />
+        <result property="dtCode"    column="dtCode"    />
+        <result property="moduleCode"    column="moduleCode"    />
+    </resultMap>
+
+    <sql id="selectJhcnModuleBindVo">
+        select b.id, b.module_id, b.dt_id, b.bz_code, b.bind_time, b.del_flag ,m.module as moduleCode, d.dt_code as dtCode from jhcn_module_bind b
+        left join jhcn_module m on b.module_id = m.id
+        left join jhcn_dt_library d on b.dt_id = d.id
+    </sql>
+
+    <select id="selectJhcnModuleBindList" parameterType="JhcnModuleBind" resultMap="JhcnModuleBindResult">
+        <include refid="selectJhcnModuleBindVo"/>
+        <where>
+            <if test="moduleId != null "> and b.module_id = #{moduleId}</if>
+            <if test="dtId != null "> and b.dt_id = #{dtId}</if>
+            <if test="bzCode != null  and bzCode != ''"> and b.bz_code = #{bzCode}</if>
+            <if test="bindTime != null "> and b.bind_time = #{bindTime}</if>
+        </where>
+    </select>
+
+    <select id="selectJhcnModuleBindById" parameterType="Long" resultMap="JhcnModuleBindResult">
+        <include refid="selectJhcnModuleBindVo"/>
+        where b.id = #{id}
+    </select>
+    <select id="selectJhcnModuleBindByDtCode" parameterType="String" resultMap="JhcnModuleBindResult">
+        <include refid="selectJhcnModuleBindVo"/>
+        where d.dt_code = #{dtCode}
+    </select>
+
+    <insert id="insertJhcnModuleBind" parameterType="JhcnModuleBind" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_module_bind
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="moduleId != null">module_id,</if>
+            <if test="dtId != null">dt_id,</if>
+            <if test="bzCode != null">bz_code,</if>
+            <if test="bindTime != null">bind_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="moduleId != null">#{moduleId},</if>
+            <if test="dtId != null">#{dtId},</if>
+            <if test="bzCode != null">#{bzCode},</if>
+            <if test="bindTime != null">#{bindTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnModuleBind" parameterType="JhcnModuleBind">
+        update jhcn_module_bind
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="moduleId != null">module_id = #{moduleId},</if>
+            <if test="dtId != null">dt_id = #{dtId},</if>
+            <if test="bzCode != null">bz_code = #{bzCode},</if>
+            <if test="bindTime != null">bind_time = #{bindTime},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnModuleBindById" parameterType="Long">
+        delete from jhcn_module_bind where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnModuleBindByIds" parameterType="String">
+        delete from jhcn_module_bind where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

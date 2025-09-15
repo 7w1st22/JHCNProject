@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnEmployeeMapper">
+    
+    <resultMap type="JhcnEmployee" id="JhcnEmployeeResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="credentialType"    column="credential_type"    />
+        <result property="credentialNo"    column="credential_no"    />
+        <result property="namePy"    column="name_py"    />
+        <result property="employeeType"    column="employee_type"    />
+        <result property="companyName"    column="company_name"    />
+        <result property="jobSource"    column="job_source"    />
+        <result property="workPlace"    column="work_place"    />
+        <result property="socialSecurityPaymentLocation"    column="social_security_payment_location"    />
+        <result property="sex"    column="sex"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="ethn"    column="ethn"    />
+        <result property="marriageStatus"    column="marriage_status"    />
+        <result property="nation"    column="nation"    />
+        <result property="registeredResidenceNature"    column="registered_residence_nature"    />
+        <result property="permanentResidence"    column="permanent_residence"    />
+        <result property="permanentResidenceAddress"    column="permanent_residence_address"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="birthPlace"    column="birth_place"    />
+        <result property="homeAddress"    column="home_address"    />
+        <result property="homeAddressInfo"    column="home_address_info"    />
+        <result property="workStart"    column="work_start"    />
+        <result property="jobStart"    column="job_start"    />
+        <result property="email"    column="email"    />
+        <result property="phone"    column="phone"    />
+    </resultMap>
+
+    <sql id="selectJhcnEmployeeVo">
+        select id, name, credential_type, credential_no, name_py, employee_type, company_name, job_source, work_place, social_security_payment_location, sex, birthday, ethn, marriage_status, nation, registered_residence_nature, permanent_residence, permanent_residence_address, native_place, birth_place, home_address, home_address_info, work_start, job_start, email, phone from jhcn_employee
+    </sql>
+
+    <select id="selectJhcnEmployeeList" parameterType="JhcnEmployee" resultMap="JhcnEmployeeResult">
+        <include refid="selectJhcnEmployeeVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="credentialType != null  and credentialType != ''"> and credential_type = #{credentialType}</if>
+            <if test="credentialNo != null  and credentialNo != ''"> and credential_no like concat('%', #{credentialNo}, '%')</if>
+            <if test="namePy != null  and namePy != ''"> and name_py like concat('%', #{namePy}, '%')</if>
+            <if test="employeeType != null  and employeeType != ''"> and employee_type = #{employeeType}</if>
+            <if test="companyName != null  and companyName != ''"> and company_name like concat('%', #{companyName}, '%')</if>
+            <if test="jobSource != null  and jobSource != ''"> and job_source = #{jobSource}</if>
+            <if test="workPlace != null  and workPlace != ''"> and work_place like concat('%', #{workPlace}, '%')</if>
+            <if test="socialSecurityPaymentLocation != null  and socialSecurityPaymentLocation != ''"> and social_security_payment_location like concat('%', #{socialSecurityPaymentLocation}, '%')</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="birthday != null  and birthday != ''"> and birthday = #{birthday}</if>
+            <if test="ethn != null  and ethn != ''"> and ethn = #{ethn}</if>
+            <if test="marriageStatus != null  and marriageStatus != ''"> and marriage_status = #{marriageStatus}</if>
+            <if test="nation != null  and nation != ''"> and nation = #{nation}</if>
+            <if test="registeredResidenceNature != null  and registeredResidenceNature != ''"> and registered_residence_nature = #{registeredResidenceNature}</if>
+            <if test="permanentResidence != null  and permanentResidence != ''"> and permanent_residence like concat('%', #{permanentResidence}, '%')</if>
+            <if test="permanentResidenceAddress != null  and permanentResidenceAddress != ''"> and permanent_residence_address like concat('%', #{permanentResidenceAddress}, '%')</if>
+            <if test="nativePlace != null  and nativePlace != ''"> and native_place like concat('%', #{nativePlace}, '%')</if>
+            <if test="birthPlace != null  and birthPlace != ''"> and birth_place like concat('%', #{birthPlace}, '%')</if>
+            <if test="homeAddress != null  and homeAddress != ''"> and home_address like concat('%', #{homeAddress}, '%')</if>
+            <if test="homeAddressInfo != null  and homeAddressInfo != ''"> and home_address_info like concat('%', #{homeAddressInfo}, '%')</if>
+            <if test="workStart != null  and workStart != ''"> and work_start = #{workStart}</if>
+            <if test="jobStart != null  and jobStart != ''"> and job_start = #{jobStart}</if>
+            <if test="email != null  and email != ''"> and email like concat('%', #{email}, '%')</if>
+            <if test="phone != null  and phone != ''"> and phone like concat('%', #{phone}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectJhcnEmployeeById" parameterType="Long" resultMap="JhcnEmployeeResult">
+        <include refid="selectJhcnEmployeeVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectJhcnEmployeeByName"  parameterType="String" resultMap="JhcnEmployeeResult">
+        <include refid="selectJhcnEmployeeVo"/>
+        where `name` = #{name}
+    </select>
+    <select id="selectJhcnEmployeeByCardNo" parameterType="String" resultMap="JhcnEmployeeResult">
+        <include refid="selectJhcnEmployeeVo"/>
+        where credential_no = #{credentialNo}
+    </select>
+
+    <insert id="insertJhcnEmployee" parameterType="JhcnEmployee" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="credentialType != null">credential_type,</if>
+            <if test="credentialNo != null">credential_no,</if>
+            <if test="namePy != null">name_py,</if>
+            <if test="employeeType != null">employee_type,</if>
+            <if test="companyName != null">company_name,</if>
+            <if test="jobSource != null">job_source,</if>
+            <if test="workPlace != null">work_place,</if>
+            <if test="socialSecurityPaymentLocation != null">social_security_payment_location,</if>
+            <if test="sex != null">sex,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="ethn != null">ethn,</if>
+            <if test="marriageStatus != null">marriage_status,</if>
+            <if test="nation != null">nation,</if>
+            <if test="registeredResidenceNature != null">registered_residence_nature,</if>
+            <if test="permanentResidence != null">permanent_residence,</if>
+            <if test="permanentResidenceAddress != null">permanent_residence_address,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="birthPlace != null">birth_place,</if>
+            <if test="homeAddress != null">home_address,</if>
+            <if test="homeAddressInfo != null">home_address_info,</if>
+            <if test="workStart != null">work_start,</if>
+            <if test="jobStart != null">job_start,</if>
+            <if test="email != null">email,</if>
+            <if test="phone != null">phone,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="credentialType != null">#{credentialType},</if>
+            <if test="credentialNo != null">#{credentialNo},</if>
+            <if test="namePy != null">#{namePy},</if>
+            <if test="employeeType != null">#{employeeType},</if>
+            <if test="companyName != null">#{companyName},</if>
+            <if test="jobSource != null">#{jobSource},</if>
+            <if test="workPlace != null">#{workPlace},</if>
+            <if test="socialSecurityPaymentLocation != null">#{socialSecurityPaymentLocation},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="ethn != null">#{ethn},</if>
+            <if test="marriageStatus != null">#{marriageStatus},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="registeredResidenceNature != null">#{registeredResidenceNature},</if>
+            <if test="permanentResidence != null">#{permanentResidence},</if>
+            <if test="permanentResidenceAddress != null">#{permanentResidenceAddress},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="birthPlace != null">#{birthPlace},</if>
+            <if test="homeAddress != null">#{homeAddress},</if>
+            <if test="homeAddressInfo != null">#{homeAddressInfo},</if>
+            <if test="workStart != null">#{workStart},</if>
+            <if test="jobStart != null">#{jobStart},</if>
+            <if test="email != null">#{email},</if>
+            <if test="phone != null">#{phone},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnEmployee" parameterType="JhcnEmployee">
+        update jhcn_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="credentialType != null">credential_type = #{credentialType},</if>
+            <if test="credentialNo != null">credential_no = #{credentialNo},</if>
+            <if test="namePy != null">name_py = #{namePy},</if>
+            <if test="employeeType != null">employee_type = #{employeeType},</if>
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="jobSource != null">job_source = #{jobSource},</if>
+            <if test="workPlace != null">work_place = #{workPlace},</if>
+            <if test="socialSecurityPaymentLocation != null">social_security_payment_location = #{socialSecurityPaymentLocation},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="ethn != null">ethn = #{ethn},</if>
+            <if test="marriageStatus != null">marriage_status = #{marriageStatus},</if>
+            <if test="nation != null">nation = #{nation},</if>
+            <if test="registeredResidenceNature != null">registered_residence_nature = #{registeredResidenceNature},</if>
+            <if test="permanentResidence != null">permanent_residence = #{permanentResidence},</if>
+            <if test="permanentResidenceAddress != null">permanent_residence_address = #{permanentResidenceAddress},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="birthPlace != null">birth_place = #{birthPlace},</if>
+            <if test="homeAddress != null">home_address = #{homeAddress},</if>
+            <if test="homeAddressInfo != null">home_address_info = #{homeAddressInfo},</if>
+            <if test="workStart != null">work_start = #{workStart},</if>
+            <if test="jobStart != null">job_start = #{jobStart},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="phone != null">phone = #{phone},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnEmployeeById" parameterType="Long">
+        delete from jhcn_employee where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnEmployeeByIds" parameterType="String">
+        delete from jhcn_employee where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
