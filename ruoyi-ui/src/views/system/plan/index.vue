@@ -33,14 +33,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计划检定日期" prop="checkDate">
-        <el-date-picker clearable
-          v-model="queryParams.checkDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择计划检定日期">
-        </el-date-picker>
-      </el-form-item>
       <el-form-item label="工序" prop="process">
         <el-input
           v-model="queryParams.process"
@@ -103,7 +95,6 @@
 
     <el-table v-loading="loading" :data="planList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="" align="center" prop="id" />
       <el-table-column label="设备编号" align="center" prop="deviceNo" />
       <el-table-column label="机台号" align="center" prop="jtNo" />
       <el-table-column label="设备名称" align="center" prop="deviceName" />
@@ -134,7 +125,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

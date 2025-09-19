@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>易损件库存告警通知</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .alert-level {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .warning {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+        .critical {
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #e74c3c;
+        }
+        .part-image {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .part-image img {
+            max-width: 100%;
+            max-height: 250px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .description {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #7f8c8d;
+            font-size: 13px;
+            border-top: 1px solid #eaeaea;
+        }
+        .importance-tag {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        .yellow-alert {
+            background: linear-gradient(135deg, #ffd166 0%, #f9c74f 100%);
+            color: #000;
+        }
+        .red-alert {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff1c14 100%);
+            color: #090808;
+        }
+        .importance-high {
+            background-color: #ffecec;
+            color: #465cff;
+        }
+        .importance-normal {
+            background-color: #e8f5e9;
+            color: #2ecc71;
+        }
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header" th:classappend="${level} == '黄线' ? 'yellow-alert' : 'red-alert'">
+        <div class="alert-level" th:text="${level}">警告级别</div>
+        <h1>易损件库存告警通知</h1>
+        <p th:text="${partName} + ' (' + ${partType} + ')'">配件名称 (型号)</p>
+    </div>
+
+    <div class="content">
+        <div class="critical">
+            <p>警告：该易损件库存量已达到警戒线，请及时处理！</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">基本信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">配件名称</span>
+                    <span class="info-value" th:text="${partName}">配件名称</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">型号</span>
+                    <span class="info-value" th:text="${partType}">配件型号</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">安装位置</span>
+                    <span class="info-value" th:text="${pos}">位置信息</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">易损件类型</span>
+                    <span class="info-value">
+                            <span class="importance-tag" th:classappend="${importance} == '2' ? 'importance-high' : 'importance-normal'"
+                                  th:text="${importance} == '2' ? '关键配件' : '一般配件'">重要性级别</span>
+                        </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">库存信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">当前库存数量</span>
+                    <span class="info-value warning" th:text="${num}">库存数量</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">安全库存红线</span>
+                    <span class="info-value" th:text="${dangerNum}">安全库存红线</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">缓冲距离</span>
+                    <span class="info-value" th:text="${safetyNum}">安全库存黄线</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">采购与使用信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">使用寿命</span>
+                    <span class="info-value" th:text="${serviceLife}">使用寿命</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">采购周期</span>
+                    <span class="info-value" th:text="${leadTime}">采购周期</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="part-image" th:if="${img}">
+            <img th:src="${img}" alt="配件图片">
+        </div>
+
+        <div class="description" th:if="${description}">
+            <h2 class="section-title">备注信息</h2>
+            <p th:text="${description}">配件描述信息</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>此邮件由设备管理系统自动生成，请勿直接回复</p>
+        <p>如有疑问，请联系系统管理员</p>
+        <p>© 2025 设备管理系统. 版权所有.</p>
+    </div>
+</div>
+</body>
+</html>

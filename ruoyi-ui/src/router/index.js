@@ -69,6 +69,13 @@ export const constantRoutes = [
     meta: { title: '工业条码绑定系统', requiresAuth: false }
   },
   {
+    path: '/transform',
+    // component: () => import('@/views/bind/index'),
+    component: () => import('@/views/transformer/index'),
+    name: 'Base34Converter',
+    meta: { title: '江海34进制转换计算', requiresAuth: false }
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',

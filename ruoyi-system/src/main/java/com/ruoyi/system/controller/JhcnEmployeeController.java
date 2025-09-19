@@ -104,7 +104,7 @@ public class JhcnEmployeeController extends BaseController
     {
         return toAjax(jhcnEmployeeService.deleteJhcnEmployeeByIds(ids));
     }
-
+    @PreAuthorize("@ss.hasPermi('system:employee:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {
@@ -113,7 +113,7 @@ public class JhcnEmployeeController extends BaseController
     }
 
     @Log(title = "用户管理", businessType = BusinessType.IMPORT)
-    @PreAuthorize("@ss.hasPermi('system:user:import')")
+    @PreAuthorize("@ss.hasPermi('system:employee:import')")
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
     {

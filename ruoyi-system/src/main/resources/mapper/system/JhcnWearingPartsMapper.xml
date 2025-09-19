@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnWearingPartsMapper">
+
+    <resultMap type="JhcnWearingParts" id="JhcnWearingPartsResult">
+        <result property="id"    column="id"    />
+        <result property="partName"    column="part_name"    />
+        <result property="partType"    column="part_type"    />
+        <result property="pos"    column="pos"    />
+        <result property="safetyNum"    column="safety_num"    />
+        <result property="safetyDistance"    column="safety_distance"    />
+        <result property="num"    column="num"    />
+        <result property="serviceLife"    column="service_life"    />
+        <result property="leadTime"    column="lead_time"    />
+        <result property="img"    column="img"    />
+        <result property="description"    column="description"    />
+        <result property="importance"    column="importance"    />
+    </resultMap>
+
+    <sql id="selectJhcnWearingPartsVo">
+        select id, part_name, part_type, pos, safety_num, safety_distance, num, service_life, lead_time, img, description, importance from jhcn_wearing_parts
+    </sql>
+
+    <select id="selectJhcnWearingPartsList" parameterType="JhcnWearingParts" resultMap="JhcnWearingPartsResult">
+        <include refid="selectJhcnWearingPartsVo"/>
+        <where>
+            <if test="partName != null  and partName != ''"> and part_name like concat('%', #{partName}, '%')</if>
+            <if test="partType != null  and partType != ''"> and part_type like concat('%', #{partType}, '%')</if>
+            <if test="pos != null  and pos != ''"> and pos like concat('%', #{pos}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectJhcnWearingPartsById" parameterType="Long" resultMap="JhcnWearingPartsResult">
+        <include refid="selectJhcnWearingPartsVo"/>
+        where id = #{id}
+    </select>
+
+
+    <select id="selectJhcnWearingPartsByNameAndType" resultType="com.ruoyi.system.domain.JhcnWearingParts">
+        <include refid="selectJhcnWearingPartsVo"/>
+        where part_name = #{partName} and part_type = #{partType}
+    </select>
+
+    <insert id="insertJhcnWearingParts" parameterType="JhcnWearingParts" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_wearing_parts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="partName != null">part_name,</if>
+            <if test="partType != null">part_type,</if>
+            <if test="pos != null">pos,</if>
+            <if test="safetyNum != null">safety_num,</if>
+            <if test="safetyDistance != null">safety_distance,</if>
+            <if test="num != null">num,</if>
+            <if test="serviceLife != null">service_life,</if>
+            <if test="leadTime != null">lead_time,</if>
+            <if test="img != null">img,</if>
+            <if test="description != null">description,</if>
+            <if test="importance != null">importance,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="partName != null">#{partName},</if>
+            <if test="partType != null">#{partType},</if>
+            <if test="pos != null">#{pos},</if>
+            <if test="safetyNum != null">#{safetyNum},</if>
+            <if test="safetyDistance != null">#{safetyDistance},</if>
+            <if test="num != null">#{num},</if>
+            <if test="serviceLife != null">#{serviceLife},</if>
+            <if test="leadTime != null">#{leadTime},</if>
+            <if test="img != null">#{img},</if>
+            <if test="description != null">#{description},</if>
+            <if test="importance != null">#{importance},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnWearingParts" parameterType="JhcnWearingParts">
+        update jhcn_wearing_parts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="partName != null">part_name = #{partName},</if>
+            <if test="partType != null">part_type = #{partType},</if>
+            <if test="pos != null">pos = #{pos},</if>
+            <if test="safetyNum != null">safety_num = #{safetyNum},</if>
+            <if test="safetyDistance != null">safety_distance = #{safetyDistance},</if>
+            <if test="num != null">num = #{num},</if>
+            <if test="serviceLife != null">service_life = #{serviceLife},</if>
+            <if test="leadTime != null">lead_time = #{leadTime},</if>
+            <if test="img != null">img = #{img},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="importance != null">importance = #{importance},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnWearingPartsById" parameterType="Long">
+        delete from jhcn_wearing_parts where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnWearingPartsByIds" parameterType="String">
+        delete from jhcn_wearing_parts where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

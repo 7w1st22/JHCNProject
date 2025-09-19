@@ -104,7 +104,7 @@ public class JhcnEmployeeServiceImpl implements IJhcnEmployeeService
 
     @Override
     public String importUser(List<JhcnEmployee> employeeList, Boolean updateSupport, String operName) {
-        if (StringUtils.isNull(employeeList) || employeeList.size() == 0)
+        if (StringUtils.isNull(employeeList) || employeeList.isEmpty())
         {
             throw new ServiceException("导入用户数据不能为空！");
         }
