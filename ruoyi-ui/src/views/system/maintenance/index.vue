@@ -169,7 +169,7 @@
         <el-form-item label="工序" prop="process">
           <el-input v-model="form.process" placeholder="请输入工序" />
         </el-form-item>
-        <el-form-item label="定时提醒" prop="reminded" required>
+        <el-form-item label="定时提醒" prop="reminded" v-if="title==='添加维护计划'" required>
           <el-switch v-model="form.reminded" active-color="#33FF00" inactive-color="#EE1616"
                      :active-value='1' :inactive-value='0'></el-switch>
         </el-form-item>
@@ -201,7 +201,7 @@
           <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>
         </div>
         <div class="el-upload__tip text-center" slot="tip">
-          <span style="font-weight: bold;">! 导入计划默认开启提醒功能(默认每月首个工作日早上8:00) !</span>
+          <span style="font-weight: bold;">! 导入计划默认开启提醒功能(默认当日早上8:00) !</span>
         </div>
       </el-upload>
       <div slot="footer" class="dialog-footer">

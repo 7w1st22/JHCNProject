@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.JhcnMaintenancePlan;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 维护计划Mapper接口
@@ -27,7 +28,7 @@ public interface JhcnMaintenancePlanMapper
      */
     public List<JhcnMaintenancePlan> selectJhcnMaintenancePlanList(JhcnMaintenancePlan jhcnMaintenancePlan);
 
-    public JhcnMaintenancePlan selectJhcnMaintenancePlanByDeviceNo(String deviceNo);
+    public JhcnMaintenancePlan selectJhcnMaintenancePlanByDeviceNoAndJtNo(@Param("deviceNo") String deviceNo, @Param("jtNo") String jtNo);
 
     /**
      * 新增维护计划

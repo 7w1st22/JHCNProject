@@ -79,8 +79,6 @@ public class JhcnMaintenancePlanServiceImpl implements IJhcnMaintenancePlanServi
     }
 
     public void addScheduleJob(JhcnMaintenancePlan jhcnMaintenancePlan) throws SchedulerException, TaskException {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         // 添加定时任务
         SysJob job = new SysJob();
         job.setJobName("维护计划提醒-设备编号："+jhcnMaintenancePlan.getDeviceNo()+" 机台号："+jhcnMaintenancePlan.getJtNo());
@@ -90,29 +88,26 @@ public class JhcnMaintenancePlanServiceImpl implements IJhcnMaintenancePlanServi
         job.setCronExpression(getEmailCornStringByDate(jhcnMaintenancePlan.getMaintanceDate()));
         job.setMisfirePolicy("3");
         job.setStatus("0");// 正常
-        job.setInvokeTarget("planScheduleTask.planReminded(maintenance,"
-                +","+jhcnMaintenancePlan.getDeviceNo()+","+jhcnMaintenancePlan.getDeviceName()
-                +","+jhcnMaintenancePlan.getJtNo()+","+jhcnMaintenancePlan.getDeviceType()
-                +","+jhcnMaintenancePlan.getCompany()+","+sdf.format(jhcnMaintenancePlan.getMaintanceDate())
-                +","+jhcnMaintenancePlan.getProcess()+")");
+        job.setInvokeTarget("planScheduleTask.planReminded('maintenance','" +jhcnMaintenancePlan.getDeviceNo()
+                +"','"+jhcnMaintenancePlan.getJtNo()+"')");
         if(sysJobService.insertJob(job)>0){
             job.setStatus("0");
             sysJobService.changeStatus(job);
         }
     }
 
-    // 当月最开始的工作日提醒
+    // 当日提醒
     public String getEmailCornStringByDate(Date date){
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
         int month = calendar.get(Calendar.MONTH) + 1; // 月份从0开始，所以要加1
         int year = calendar.get(Calendar.YEAR);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        return String.format("%d %d %d %s %d ? %d", 0, 0, 8, "1W", month, year);
+        return String.format("%d %d %d %d %d ? %d", 0, 0, 8, day, month, year);
     }
 
-    //当日提醒
 
     /**
      * 修改维护计划
@@ -164,11 +159,13 @@ public class JhcnMaintenancePlanServiceImpl implements IJhcnMaintenancePlanServi
         {
             try
             {
-                JhcnMaintenancePlan model = jhcnMaintenancePlanMapper.selectJhcnMaintenancePlanByDeviceNo(plan.getDeviceNo());
+                JhcnMaintenancePlan model = jhcnMaintenancePlanMapper.selectJhcnMaintenancePlanByDeviceNoAndJtNo(plan.getDeviceNo(), plan.getJtNo());
                 // 不存在则新增
                 if (StringUtils.isNull(model))
                 {
                     BeanValidators.validateWithException(validator, plan);
+                    // 导入的开启通知
+                    plan.setReminded(1);
                     insertJhcnMaintenancePlan(plan);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、 维护计划 " +plan.getDeviceNo() + " 导入成功");

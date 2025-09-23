@@ -39,9 +39,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where id = #{id}
     </select>
 
-    <select id="selectJhcnMaintenancePlanByDeviceNo" parameterType="String" resultMap="JhcnMaintenancePlanResult">
+    <select id="selectJhcnMaintenancePlanByDeviceNoAndJtNo" resultMap="JhcnMaintenancePlanResult">
         <include refid="selectJhcnMaintenancePlanVo"/>
-        where device_no = #{deviceNo}
+        where device_no = #{deviceNo} and jt_no = #{jtNo}
     </select>
 
     <insert id="insertJhcnMaintenancePlan" parameterType="JhcnMaintenancePlan" useGeneratedKeys="true" keyProperty="id">

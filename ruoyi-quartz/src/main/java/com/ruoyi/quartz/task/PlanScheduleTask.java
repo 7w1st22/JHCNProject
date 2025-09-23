@@ -1,17 +1,21 @@
 package com.ruoyi.quartz.task;
 
 import com.ruoyi.common.utils.EmailUtil;
+import com.ruoyi.quartz.domain.EmailUser;
 import com.ruoyi.quartz.domain.MaintenancePlan;
+import com.ruoyi.quartz.mapper.EmailUserMapper;
 import com.ruoyi.quartz.mapper.PlanMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.mail.MessagingException;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+/**
+ * 定时任务发送提醒
+ *
+ * @author ruoyi
+ */
 @Component("planScheduleTask")
 public class PlanScheduleTask {
 
@@ -21,24 +25,39 @@ public class PlanScheduleTask {
     @Autowired
     private PlanMapper planMapper;
 
+    @Autowired
+    private EmailUserMapper emailUserMapper;
+
     /**
      * 单条计划提醒
      * @param type
      * @param deviceNo
-     * @param deviceName
-     * @param jtNo
-     * @param deviceType
-     * @param company
-     * @param maintenanceTime
-     * @param process
      */
-    public void planReminded(String type,
-                             String deviceNo,String deviceName,
-                             String jtNo,String deviceType,
-                             String company, String maintenanceTime,
-                             String process){
+    public void planReminded(String type,String deviceNo,String jtNo) throws MessagingException {
         if(type.equals("maintenance")){
             System.out.println("设备编号："+deviceNo+"的维护任务已开始");
+            MaintenancePlan maintenancePlan = planMapper.selectMaintanceDateByDeviceNoAndJtNo(deviceNo,jtNo);
+
+            if (maintenancePlan != null) {
+                // 获取当前日期
+                Date currentDate = new Date();
+
+                Map<String, Object> variables = new HashMap<>();
+                variables.put("plan", maintenancePlan);
+                variables.put("currentDate", currentDate);
+
+                List<EmailUser> whjh = emailUserMapper.selectEmailUserList("whjh");
+                for (EmailUser emailUser : whjh){
+                    if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                        emailUtil.sendTemplateEmail(
+                                "设备编号："+deviceNo+"的维护计划已开始",  // 标题
+                                "maintenance-plan-single",
+                                variables,
+                                emailUser.getEmail()
+                        );
+                    }
+                }
+            }
         }
         if(type.equals("check")){
             System.out.println("设备编号："+deviceNo+"的巡检任务已开始");
@@ -69,12 +88,16 @@ public class PlanScheduleTask {
         variables.put("nextYear", year);
         variables.put("nextMonth", month);
 
-
-        emailUtil.sendTemplateEmail(
-                nextMonthDisplay + "维护计划提醒",  // 动态标题
-                "maintenance-plan-email",
-                variables,
-                "973830996@qq.com"
-        );
+        List<EmailUser> whjh = emailUserMapper.selectEmailUserList("whjh");
+        for (EmailUser emailUser : whjh){
+            if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                emailUtil.sendTemplateEmail(
+                        nextMonthDisplay + "维护计划提醒",  // 动态标题
+                        "maintenance-plan-email",
+                        variables,
+                        emailUser.getEmail()
+                );
+            }
+        }
     }
 }
