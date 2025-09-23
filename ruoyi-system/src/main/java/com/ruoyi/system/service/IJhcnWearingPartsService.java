@@ -60,7 +60,7 @@ public interface IJhcnWearingPartsService
      */
     public int deleteJhcnWearingPartsById(Long id);
 
-    String importParts(List<JhcnWearingParts> partList, Boolean updateSupport, String operName);
+    public String importParts(List<JhcnWearingParts> partList, Boolean updateSupport, String operName);
 
 
 }

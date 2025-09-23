@@ -4,7 +4,6 @@ import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 
-import com.ruoyi.system.util.EmailUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +36,6 @@ public class JhcnModuleController extends BaseController
     @Autowired
     private IJhcnModuleService jhcnModuleService;
 
-    @Autowired
-    private EmailUtil emailUtil;
 
     /**
      * 查询模组条码列表

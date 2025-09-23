@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="设备编号" prop="deviceNo" >
+      <el-form-item label="设备编号" prop="deviceNo">
         <el-input
           v-model="queryParams.deviceNo"
           placeholder="请输入设备编号"
@@ -25,22 +25,22 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="厂家" prop="company">
-        <el-input
-          v-model="queryParams.company"
-          placeholder="请输入厂家"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+
+      <!-- 修改日期范围选择器 -->
+      <el-form-item label="维护日期" prop="maintanceDateRange">
+        <el-date-picker
+          type="daterange"
+          v-model="queryParams.maintanceDateRange"
+          format="yyyy-MM-dd"
+          value-format="yyyy-MM-dd"
+          :style="{width: '100%'}"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期"
+          range-separator="至"
+          clearable>
+        </el-date-picker>
       </el-form-item>
-      <el-form-item label="工序" prop="process">
-        <el-input
-          v-model="queryParams.process"
-          placeholder="请输入工序"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -55,7 +55,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['system:plan:add']"
+          v-hasPermi="['system:maintenance:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -66,7 +66,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['system:plan:edit']"
+          v-hasPermi="['system:maintenance:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -77,7 +77,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['system:plan:remove']"
+          v-hasPermi="['system:maintenance:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -87,7 +87,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['system:plan:export']"
+          v-hasPermi="['system:maintenance:export']"
         >导出</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -96,22 +96,22 @@
           plain icon="el-icon-upload2"
           size="mini"
           @click="handleImport"
-          v-hasPermi="['system:plan:import']"
+          v-hasPermi="['system:parts:import']"
         >导入</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="planList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="maintenanceList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="设备编号" align="center" prop="deviceNo" />
       <el-table-column label="机台号" align="center" prop="jtNo" />
       <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="型号" align="center" prop="deviceType" />
       <el-table-column label="厂家" align="center" prop="company" />
-      <el-table-column label="计划检定日期" align="center" prop="checkDate" width="180">
+      <el-table-column label="计划维护日期" align="center" prop="maintanceDate" width="180">
         <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.checkDate, '{y}-{m}-{d}') }}</span>
+          <span>{{ parseTime(scope.row.maintanceDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工序" align="center" prop="process" />
@@ -122,14 +122,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['system:plan:edit']"
+            v-hasPermi="['system:maintenance:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['system:plan:remove']"
+            v-hasPermi="['system:maintenance:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -143,7 +143,7 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改检查计划对话框 -->
+    <!-- 添加或修改维护计划对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="设备编号" prop="deviceNo">
@@ -158,22 +158,20 @@
         <el-form-item label="厂家" prop="company">
           <el-input v-model="form.company" placeholder="请输入厂家" />
         </el-form-item>
-        <el-form-item label="计划检定日期" prop="checkDate">
+        <el-form-item label="维护日期" prop="maintanceDate">
           <el-date-picker clearable
-            v-model="form.checkDate"
+            v-model="form.maintanceDate"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择计划检定日期">
+            placeholder="请选择计划维护日期">
           </el-date-picker>
-        </el-form-item>
-        <el-form-item label="检定类型" prop="checkType">
-          <el-radio-group v-model="form.checkType" size="medium">
-            <el-radio v-for="(item, index) in field101Options" :key="index" :label="item.value"
-                      :disabled="item.disabled">{{item.label}}</el-radio>
-          </el-radio-group>
         </el-form-item>
         <el-form-item label="工序" prop="process">
           <el-input v-model="form.process" placeholder="请输入工序" />
+        </el-form-item>
+        <el-form-item label="定时提醒" prop="reminded" required>
+          <el-switch v-model="form.reminded" active-color="#33FF00" inactive-color="#EE1616"
+                     :active-value='1' :inactive-value='0'></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -181,7 +179,6 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-
 
     <!-- 导入对话框保持不变 -->
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
@@ -203,6 +200,9 @@
           <span>仅允许导入xls、xlsx格式文件。</span>
           <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>
         </div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <span style="font-weight: bold;">! 导入计划默认开启提醒功能(默认每月首个工作日早上8:00) !</span>
+        </div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitFileForm">确 定</el-button>
@@ -213,20 +213,13 @@
 </template>
 
 <script>
-import { listPlan, getPlan, delPlan, addPlan, updatePlan } from "@/api/system/plan";
-import { getToken } from "@/utils/auth";
+import { listMaintenance, getMaintenance, delMaintenance, addMaintenance, updateMaintenance } from "@/api/system/maintenance";
+import {getToken} from "@/utils/auth";
 
 export default {
-  name: "Plan",
+  name: "Maintenance",
   data() {
     return {
-      field101Options: [{
-        "label": "内校",
-        "value": '1'
-      }, {
-        "label": "外校",
-        "value": '2'
-      }],
       // 遮罩层
       loading: true,
       // 选中数组
@@ -239,8 +232,8 @@ export default {
       showSearch: true,
       // 总条数
       total: 0,
-      // 检查计划表格数据
-      planList: [],
+      // 维护计划表格数据
+      maintenanceList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -253,17 +246,15 @@ export default {
         jtNo: null,
         deviceName: null,
         deviceType: null,
-        company: null,
-        checkDate: null,
-        checkType: null,
-        process: null
+        maintanceDateRange: []
       },
       // 表单参数
-      form: {},
+      form: {
+      },
       // 表单校验
       rules: {
-        checkDate: [
-          { required: true, message: "计划检定日期不能为空", trigger: "blur" }
+        maintanceDate: [
+          { required: true, message: "计划维护日期不能为空", trigger: "blur" }
         ],
         deviceNo: [
           { required: true, message: "设备编号不能为空", trigger: "blur" }
@@ -282,7 +273,7 @@ export default {
         // 设置上传的请求头部
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
-        url: process.env.VUE_APP_BASE_API + "/system/plan/importData"
+        url: process.env.VUE_APP_BASE_API + "/system/maintenance/importData"
       }
     };
   },
@@ -290,11 +281,12 @@ export default {
     this.getList();
   },
   methods: {
-    /** 查询检查计划列表 */
+    /** 查询维护计划列表 */
     getList() {
       this.loading = true;
-      listPlan(this.queryParams).then(response => {
-        this.planList = response.rows;
+
+      listMaintenance(this.queryParams).then(response => {
+        this.maintenanceList = response.rows;
         this.total = response.total;
         this.loading = false;
       });
@@ -313,8 +305,9 @@ export default {
         deviceName: null,
         deviceType: null,
         company: null,
-        checkDate: null,
-        process: null
+        maintanceDate: null,
+        process: null,
+        reminded: 1
       };
       this.resetForm("form");
     },
@@ -326,6 +319,8 @@ export default {
     /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm");
+      // 清空日期范围
+      this.queryParams.maintanceDateRange = [];
       this.handleQuery();
     },
     // 多选框选中数据
@@ -338,16 +333,16 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加检定计划";
+      this.title = "添加维护计划";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset();
       const id = row.id || this.ids
-      getPlan(id).then(response => {
+      getMaintenance(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改检定计划";
+        this.title = "修改维护计划";
       });
     },
     /** 提交按钮 */
@@ -355,13 +350,13 @@ export default {
       this.$refs["form"].validate(valid => {
         if (valid) {
           if (this.form.id != null) {
-            updatePlan(this.form).then(response => {
+            updateMaintenance(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
-            addPlan(this.form).then(response => {
+            addMaintenance(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
@@ -373,8 +368,8 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除检查计划编号为"' + ids + '"的数据项？').then(function() {
-        return delPlan(ids);
+      this.$modal.confirm('是否确认删除维护计划编号为"' + ids + '"的数据项？').then(function() {
+        return delMaintenance(ids);
       }).then(() => {
         this.getList();
         this.$modal.msgSuccess("删除成功");
@@ -382,11 +377,13 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('system/plan/export', {
-        ...this.queryParams
-      }, `plan_${new Date().getTime()}.xlsx`)
+      this.download('system/maintenance/export', this.queryParams, `维护计划_${new Date().getTime()}.xlsx`)
     },
-
+    /** 导入按钮操作 */
+    handleImport() {
+      this.upload.title = "维护计划导入";
+      this.upload.open = true;
+    },
     // 文件上传中处理
     handleFileUploadProgress(event, file, fileList) {
       this.upload.isUploading = true;
@@ -403,13 +400,7 @@ export default {
 
     /** 下载模板操作 */
     importTemplate() {
-      this.download('system/plan/importTemplate', {}, `检定计划模版_${new Date().getTime()}.xlsx`)
-    },
-
-    /** 导入按钮操作 */
-    handleImport() {
-      this.upload.title = "检定计划导入";
-      this.upload.open = true;
+      this.download('system/maintenance/importTemplate', {}, `维护计划模版_${new Date().getTime()}.xlsx`)
     },
 
     // 提交上传文件

@@ -2,59 +2,58 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.system.mapper.JhcnCheckPlanMapper">
+<mapper namespace="com.ruoyi.system.mapper.JhcnMaintenancePlanMapper">
 
-    <resultMap type="JhcnCheckPlan" id="JhcnCheckPlanResult">
+    <resultMap type="JhcnMaintenancePlan" id="JhcnMaintenancePlanResult">
         <result property="id"    column="id"    />
         <result property="deviceNo"    column="device_no"    />
         <result property="jtNo"    column="jt_no"    />
         <result property="deviceName"    column="device_name"    />
         <result property="deviceType"    column="device_type"    />
         <result property="company"    column="company"    />
-        <result property="checkDate"    column="check_date"    />
+        <result property="maintanceDate"    column="maintance_date"    />
         <result property="process"    column="process"    />
-        <result property="checkType"    column="check_type"    />
     </resultMap>
 
-    <sql id="selectJhcnCheckPlanVo">
-        select id, device_no, jt_no, device_name, device_type, company, check_date, process, check_type from jhcn_check_plan
+    <sql id="selectJhcnMaintenancePlanVo">
+        select id, device_no, jt_no, device_name, device_type, company, maintance_date, process from jhcn_maintenance_plan
     </sql>
 
-    <select id="selectJhcnCheckPlanList" parameterType="JhcnCheckPlan" resultMap="JhcnCheckPlanResult">
-        <include refid="selectJhcnCheckPlanVo"/>
+    <select id="selectJhcnMaintenancePlanList" parameterType="JhcnMaintenancePlan" resultMap="JhcnMaintenancePlanResult">
+        <include refid="selectJhcnMaintenancePlanVo"/>
         <where>
-            <if test="deviceNo != null  and deviceNo != ''"> and device_no = #{deviceNo}</if>
-            <if test="jtNo != null  and jtNo != ''"> and jt_no = #{jtNo}</if>
+            <if test="deviceNo != null  and deviceNo != ''"> and device_no like concat('%', #{deviceNo}, '%')</if>
+            <if test="jtNo != null  and jtNo != ''"> and jt_no like concat('%', #{jtNo}, '%')</if>
             <if test="deviceName != null  and deviceName != ''"> and device_name like concat('%', #{deviceName}, '%')</if>
-            <if test="deviceType != null  and deviceType != ''"> and device_type like concat('%', #{deviceType}, '%')</if>
-            <if test="company != null  and company != ''"> and company = #{company}</if>
-            <if test="checkDate != null "> and check_date = #{checkDate}</if>
-            <if test="process != null  and process != ''"> and process = #{process}</if>
-            <if test="checkType != null  and checkType != ''"> and check_type = #{checkType}</if>
+            <if test="deviceType != null  and deviceType != ''"> and device_type = #{deviceType}</if>
+            <!-- 使用标准的参数名 -->
+            <if test="params.beginDate != null and params.beginDate != '' and params.endDate != null and params.endDate != ''">
+                AND maintance_date BETWEEN #{params.beginDate} AND #{params.endDate}
+            </if>
         </where>
+        order by maintance_date ASC
     </select>
 
-    <select id="selectJhcnCheckPlanById" parameterType="Long" resultMap="JhcnCheckPlanResult">
-        <include refid="selectJhcnCheckPlanVo"/>
+    <select id="selectJhcnMaintenancePlanById" parameterType="Long" resultMap="JhcnMaintenancePlanResult">
+        <include refid="selectJhcnMaintenancePlanVo"/>
         where id = #{id}
     </select>
 
-    <select id="selectJhcnCheckPlanByDeviceNo" parameterType="String" resultMap="JhcnCheckPlanResult">
-        <include refid="selectJhcnCheckPlanVo"/>
+    <select id="selectJhcnMaintenancePlanByDeviceNo" parameterType="String" resultMap="JhcnMaintenancePlanResult">
+        <include refid="selectJhcnMaintenancePlanVo"/>
         where device_no = #{deviceNo}
     </select>
 
-    <insert id="insertJhcnCheckPlan" parameterType="JhcnCheckPlan" useGeneratedKeys="true" keyProperty="id">
-        insert into jhcn_check_plan
+    <insert id="insertJhcnMaintenancePlan" parameterType="JhcnMaintenancePlan" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_maintenance_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="deviceNo != null">device_no,</if>
             <if test="jtNo != null">jt_no,</if>
             <if test="deviceName != null">device_name,</if>
             <if test="deviceType != null">device_type,</if>
             <if test="company != null">company,</if>
-            <if test="checkDate != null">check_date,</if>
+            <if test="maintanceDate != null">maintance_date,</if>
             <if test="process != null">process,</if>
-            <if test="checkType != null">check_type,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceNo != null">#{deviceNo},</if>
@@ -62,33 +61,31 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceName != null">#{deviceName},</if>
             <if test="deviceType != null">#{deviceType},</if>
             <if test="company != null">#{company},</if>
-            <if test="checkDate != null">#{checkDate},</if>
+            <if test="maintanceDate != null">#{maintanceDate},</if>
             <if test="process != null">#{process},</if>
-            <if test="checkType != null">#{checkType},</if>
          </trim>
     </insert>
 
-    <update id="updateJhcnCheckPlan" parameterType="JhcnCheckPlan">
-        update jhcn_check_plan
+    <update id="updateJhcnMaintenancePlan" parameterType="JhcnMaintenancePlan">
+        update jhcn_maintenance_plan
         <trim prefix="SET" suffixOverrides=",">
             <if test="deviceNo != null">device_no = #{deviceNo},</if>
             <if test="jtNo != null">jt_no = #{jtNo},</if>
             <if test="deviceName != null">device_name = #{deviceName},</if>
             <if test="deviceType != null">device_type = #{deviceType},</if>
             <if test="company != null">company = #{company},</if>
-            <if test="checkDate != null">check_date = #{checkDate},</if>
+            <if test="maintanceDate != null">maintance_date = #{maintanceDate},</if>
             <if test="process != null">process = #{process},</if>
-            <if test="checkType != null">check_type = #{checkType},</if>
         </trim>
         where id = #{id}
     </update>
 
-    <delete id="deleteJhcnCheckPlanById" parameterType="Long">
-        delete from jhcn_check_plan where id = #{id}
+    <delete id="deleteJhcnMaintenancePlanById" parameterType="Long">
+        delete from jhcn_maintenance_plan where id = #{id}
     </delete>
 
-    <delete id="deleteJhcnCheckPlanByIds" parameterType="String">
-        delete from jhcn_check_plan where id in
+    <delete id="deleteJhcnMaintenancePlanByIds" parameterType="String">
+        delete from jhcn_maintenance_plan where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>

@@ -1,6 +1,6 @@
 package com.ruoyi.system.controller;
 
-import com.ruoyi.system.util.EmailUtil;
+import com.ruoyi.common.utils.EmailUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.spring5.SpringTemplateEngine;

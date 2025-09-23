@@ -8,16 +8,16 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 
 /**
- * 检查计划对象 jhcn_check_plan
+ * 维护计划对象 jhcn_maintenance_plan
  *
  * @author russel
- * @date 2025-09-12
+ * @date 2025-09-22
  */
-public class JhcnCheckPlan extends BaseEntity
+public class JhcnMaintenancePlan extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 
-    /**  */
+    /** $column.columnComment */
     private Long id;
 
     /** 设备编号 */
@@ -40,25 +40,23 @@ public class JhcnCheckPlan extends BaseEntity
     @Excel(name = "厂家")
     private String company;
 
-    /** 计划检定日期 */
+    /** 计划维护日期 */
     @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "计划检定日期", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date checkDate;
+    @Excel(name = "计划维护日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date maintanceDate;
 
     /** 工序 */
     @Excel(name = "工序")
     private String process;
 
-    /** 检定类型 */
-    @Excel(name = "检定类型(内校=1，外校=2)")
-    private String checkType;
+    private int reminded;
 
-    public String getCheckType() {
-        return checkType;
+    public int getReminded() {
+        return reminded;
     }
 
-    public void setCheckType(String checkType) {
-        this.checkType = checkType;
+    public void setReminded(int reminded) {
+        this.reminded = reminded;
     }
 
     public void setId(Long id)
@@ -121,14 +119,14 @@ public class JhcnCheckPlan extends BaseEntity
         return company;
     }
 
-    public void setCheckDate(Date checkDate)
+    public void setMaintanceDate(Date maintanceDate)
     {
-        this.checkDate = checkDate;
+        this.maintanceDate = maintanceDate;
     }
 
-    public Date getCheckDate()
+    public Date getMaintanceDate()
     {
-        return checkDate;
+        return maintanceDate;
     }
 
     public void setProcess(String process)
@@ -150,7 +148,7 @@ public class JhcnCheckPlan extends BaseEntity
             .append("deviceName", getDeviceName())
             .append("deviceType", getDeviceType())
             .append("company", getCompany())
-            .append("checkDate", getCheckDate())
+            .append("maintanceDate", getMaintanceDate())
             .append("process", getProcess())
             .toString();
     }

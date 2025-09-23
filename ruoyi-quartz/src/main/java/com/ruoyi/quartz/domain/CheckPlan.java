@@ -1,11 +1,12 @@
-package com.ruoyi.system.domain;
+package com.ruoyi.quartz.domain;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
+
+import java.util.Date;
 
 /**
  * 检查计划对象 jhcn_check_plan
@@ -13,7 +14,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author russel
  * @date 2025-09-12
  */
-public class JhcnCheckPlan extends BaseEntity
+public class CheckPlan extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
 

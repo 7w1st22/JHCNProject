@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.quartz.mapper.PlanMapper">
+
+    <resultMap type="MaintenancePlan" id="MaintenancePlanResult">
+        <result property="id"    column="id"    />
+        <result property="deviceNo"    column="device_no"    />
+        <result property="jtNo"    column="jt_no"    />
+        <result property="deviceName"    column="device_name"    />
+        <result property="deviceType"    column="device_type"    />
+        <result property="company"    column="company"    />
+        <result property="maintanceDate"    column="maintance_date"    />
+        <result property="process"    column="process"    />
+    </resultMap>
+
+    <sql id="selectJhcnMaintenancePlanVo">
+        select id, device_no, jt_no, device_name, device_type, company, maintance_date, process from jhcn_maintenance_plan
+    </sql>
+
+    <select id="selectMaintenancePlanListByMonth" resultMap="MaintenancePlanResult">
+        select id, device_no, jt_no, device_name, device_type, company, maintance_date, process from jhcn_maintenance_plan
+        WHERE
+            DATE_FORMAT(maintance_date, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y-%m')
+        order by maintance_date ASC
+    </select>
+
+
+</mapper>

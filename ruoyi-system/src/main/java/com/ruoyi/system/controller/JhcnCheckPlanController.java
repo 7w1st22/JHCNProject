@@ -2,6 +2,9 @@ package com.ruoyi.system.controller;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.ruoyi.system.domain.JhcnMaintenancePlan;
+import com.ruoyi.system.domain.JhcnWearingParts;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,10 +23,11 @@ import com.ruoyi.system.domain.JhcnCheckPlan;
 import com.ruoyi.system.service.IJhcnCheckPlanService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 检查计划Controller
- * 
+ *
  * @author russel
  * @date 2025-09-12
  */
@@ -100,5 +104,24 @@ public class JhcnCheckPlanController extends BaseController
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(jhcnCheckPlanService.deleteJhcnCheckPlanByIds(ids));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:plan:import')")
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response)
+    {
+        ExcelUtil<JhcnCheckPlan> util = new ExcelUtil<JhcnCheckPlan>(JhcnCheckPlan.class);
+        util.importTemplateExcel(response, "易损件数据");
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:plan:import')")
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<JhcnCheckPlan> util = new ExcelUtil<JhcnCheckPlan>(JhcnCheckPlan.class);
+        List<JhcnCheckPlan> checkList = util.importExcel(file.getInputStream());
+        String operName = getUsername();
+        String message = jhcnCheckPlanService.importList(checkList, updateSupport, operName);
+        return success(message);
     }
 }
