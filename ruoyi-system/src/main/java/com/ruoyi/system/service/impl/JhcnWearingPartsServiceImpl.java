@@ -123,13 +123,15 @@ public class JhcnWearingPartsServiceImpl implements IJhcnWearingPartsService
                 if(user.getEmail()!=null){
                     if(level.equals("safety")){
                         Map<String,Object> obj =constructEmailObj(part,"黄线");
-                        emailUtil.sendTemplateEmail("库存数量阈值告警", "partAlarmTemplate", obj, user.getEmail());
-                        System.out.println("发送");
+                        if(user.getEmail()!=null&&!user.getEmail().equals("")){
+                            emailUtil.sendTemplateEmail("库存数量阈值告警", "partAlarmTemplate", obj, user.getEmail());
+                        }
                     }
                     if(level.equals("danger")){
                         Map<String,Object> obj =constructEmailObj(part,"红线");
-                        emailUtil.sendTemplateEmail("库存数量阈值告警", "partAlarmTemplate", obj, user.getEmail());
-                        System.out.println("发送");
+                        if(user.getEmail()!=null&&!user.getEmail().equals("")){
+                            emailUtil.sendTemplateEmail("库存数量阈值告警", "partAlarmTemplate", obj, user.getEmail());
+                        }
                     }
                 }else{
                     throw new ServiceException("用户邮箱为空");

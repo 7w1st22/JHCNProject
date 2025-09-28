@@ -20,7 +20,7 @@ public class EmailUtil {
     @Autowired
     private TemplateEngine templateEngine; // 可选，用于模板渲染
 
-    public static final String FROM = "973830996@qq.com";
+    public static final String FROM = "lule@jianghai.com";
 
     /**
      * 发送HTML格式邮件
