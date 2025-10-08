@@ -9,6 +9,8 @@ import java.util.List;
 public interface PlanMapper {
 
     public List<MaintenancePlan> selectMaintenancePlanListByMonth();
+
+    public List<MaintenancePlan> selectMaintenancePlanListToday();
 //    public List<CheckPlan> selectCheckPlanListByMonth(JhcnMaintenancePlan jhcnMaintenancePlan);
     public MaintenancePlan selectMaintanceDateByDeviceNoAndJtNo(@Param("deviceNo") String deviceNo, @Param("jtNo") String jtNo);
 }

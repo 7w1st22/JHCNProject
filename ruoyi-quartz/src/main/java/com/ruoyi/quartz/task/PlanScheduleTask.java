@@ -100,4 +100,40 @@ public class PlanScheduleTask {
             }
         }
     }
+
+    /**
+     * 每日计划提醒
+     * @throws MessagingException
+     */
+    public void checkNextDayMaintenance(){
+        // 当日所有维护计划
+        List<MaintenancePlan> plans = planMapper.selectMaintenancePlanListToday();
+
+        if(!plans.isEmpty()){
+            // 获取当前日期
+            Date currentDate = new Date();
+            for(MaintenancePlan plan:plans){
+                Map<String, Object> variables = new HashMap<>();
+                variables.put("plan", plan);
+                variables.put("currentDate", currentDate);
+
+                List<EmailUser> whjh = emailUserMapper.selectEmailUserList("whjh");
+                for (EmailUser emailUser : whjh){
+                    if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                        try{
+                            emailUtil.sendTemplateEmail(
+                                    "设备编号："+plan.getDeviceNo()+"的维护计划已开始",  // 标题
+                                    "maintenance-plan-single",
+                                    variables,
+                                    emailUser.getEmail()
+                            );
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        }
+    }
 }

@@ -26,6 +26,13 @@
         order by maintance_date ASC
     </select>
 
+    <select id="selectMaintenancePlanListToday" resultMap="MaintenancePlanResult">
+        SELECT id, device_no, jt_no, device_name, device_type, company, maintance_date, process
+        FROM jhcn_maintenance_plan
+        WHERE DATE(maintance_date) = DATE(CURDATE())
+        ORDER BY maintance_date ASC;
+    </select>
+
     <select id="selectMaintanceDateByDeviceNoAndJtNo" parameterType="String" resultMap="MaintenancePlanResult">
         <include refid="selectJhcnMaintenancePlanVo"/>
         where device_no = #{deviceNo} and jt_no = #{jtNo}
