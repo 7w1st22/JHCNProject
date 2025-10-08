@@ -13,10 +13,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="company"    column="company"    />
         <result property="maintanceDate"    column="maintance_date"    />
         <result property="process"    column="process"    />
+        <result property="alarm"    column="alarm"    />
     </resultMap>
 
     <sql id="selectJhcnMaintenancePlanVo">
-        select id, device_no, jt_no, device_name, device_type, company, maintance_date, process from jhcn_maintenance_plan
+        select id, device_no, jt_no, device_name, device_type, company, maintance_date, process ,alarm from jhcn_maintenance_plan
     </sql>
 
     <select id="selectJhcnMaintenancePlanList" parameterType="JhcnMaintenancePlan" resultMap="JhcnMaintenancePlanResult">
@@ -54,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="company != null">company,</if>
             <if test="maintanceDate != null">maintance_date,</if>
             <if test="process != null">process,</if>
+            <if test="alarm != null">alarm,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceNo != null">#{deviceNo},</if>
@@ -63,6 +65,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="company != null">#{company},</if>
             <if test="maintanceDate != null">#{maintanceDate},</if>
             <if test="process != null">#{process},</if>
+            <if test="alarm != null">#{alarm},</if>
          </trim>
     </insert>
 
@@ -76,6 +79,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="company != null">company = #{company},</if>
             <if test="maintanceDate != null">maintance_date = #{maintanceDate},</if>
             <if test="process != null">process = #{process},</if>
+            <if test="alarm != null">alarm = #{alarm},</if>
         </trim>
         where id = #{id}
     </update>

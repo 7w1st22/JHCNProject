@@ -67,9 +67,8 @@ public class PlanScheduleTask {
 
     /**
      * 下月计划提醒
-     * @throws MessagingException
      */
-    public void checkNextMonthMaintenance() throws MessagingException {
+    public void checkNextMonthMaintenance() {
         // 下个月所有维护计划
         List<MaintenancePlan> plans = planMapper.selectMaintenancePlanListByMonth();
         // 计算下个月份信息
@@ -91,12 +90,16 @@ public class PlanScheduleTask {
         List<EmailUser> whjh = emailUserMapper.selectEmailUserList("whjh");
         for (EmailUser emailUser : whjh){
             if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
-                emailUtil.sendTemplateEmail(
-                        nextMonthDisplay + "维护计划提醒",  // 动态标题
-                        "maintenance-plan-email",
-                        variables,
-                        emailUser.getEmail()
-                );
+                try{
+                    emailUtil.sendTemplateEmail(
+                            nextMonthDisplay + "维护计划提醒",  // 动态标题
+                            "maintenance-plan-email",
+                            variables,
+                            emailUser.getEmail()
+                    );
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
             }
         }
     }

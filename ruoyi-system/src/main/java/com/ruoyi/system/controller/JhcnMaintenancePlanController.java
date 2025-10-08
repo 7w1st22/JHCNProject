@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
+import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.job.TaskException;
 import com.ruoyi.system.domain.JhcnWearingParts;
 import org.quartz.SchedulerException;
@@ -146,5 +147,21 @@ public class JhcnMaintenancePlanController extends BaseController
         String operName = getUsername();
         String message = jhcnMaintenancePlanService.importList(mList, updateSupport, operName);
         return success(message);
+    }
+
+    /**
+     * 修改计划当日提醒状态
+     */
+    @PutMapping("/changeStatus")
+    public AjaxResult changeStatus(@RequestBody JhcnMaintenancePlan plan)
+    {
+        JhcnMaintenancePlan model = jhcnMaintenancePlanService.selectJhcnMaintenancePlanById(plan.getId());
+        if(model!=null){
+            model.setAlarm(plan.getAlarm());
+            return toAjax(jhcnMaintenancePlanService.updateJhcnMaintenancePlan(model));
+        }else{
+            return error("计划不存在");
+        }
+
     }
 }

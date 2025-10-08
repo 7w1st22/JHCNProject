@@ -42,3 +42,16 @@ export function delMaintenance(id) {
     method: 'delete'
   })
 }
+
+// 用户状态修改
+export function changeAlarmStatus(id, alarm) {
+  const data = {
+    id,
+    alarm
+  }
+  return request({
+    url: '/system/maintenance/changeStatus',
+    method: 'put',
+    data: data
+  })
+}

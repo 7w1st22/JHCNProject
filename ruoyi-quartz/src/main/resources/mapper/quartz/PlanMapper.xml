@@ -23,6 +23,7 @@
         select id, device_no, jt_no, device_name, device_type, company, maintance_date, process from jhcn_maintenance_plan
         WHERE
             DATE_FORMAT(maintance_date, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y-%m')
+            and alarm = '1'
         order by maintance_date ASC
     </select>
 
@@ -30,6 +31,7 @@
         SELECT id, device_no, jt_no, device_name, device_type, company, maintance_date, process
         FROM jhcn_maintenance_plan
         WHERE DATE(maintance_date) = DATE(CURDATE())
+        and alarm = '1'
         ORDER BY maintance_date ASC;
     </select>
 

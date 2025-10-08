@@ -49,7 +49,18 @@ public class JhcnMaintenancePlan extends BaseEntity
     @Excel(name = "工序")
     private String process;
 
+    /** 提醒 0 关闭 1 开启 **/
+    private String alarm;
+
     private int reminded;
+
+    public String getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm = alarm;
+    }
 
     public int getReminded() {
         return reminded;
