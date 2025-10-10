@@ -65,6 +65,7 @@ export const constantRoutes = [
     path: '/bind-client',
     // component: () => import('@/views/bind/index'),
     component: () => import('@/views/bind/IndustrialBarcodeSystem'),
+    hidden: true, // 不在侧边栏显示
     name: 'Bind-client',
     meta: { title: '工业条码绑定系统', requiresAuth: false }
   },
@@ -72,6 +73,7 @@ export const constantRoutes = [
     path: '/transform',
     // component: () => import('@/views/bind/index'),
     component: () => import('@/views/transformer/index'),
+    hidden: true, // 不在侧边栏显示
     name: 'Base34Converter',
     meta: { title: '江海34进制转换计算', requiresAuth: false }
   },
