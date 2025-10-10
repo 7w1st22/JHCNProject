@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnProcessMapper">
+
+    <resultMap type="JhcnProcess" id="JhcnProcessResult">
+        <result property="id"    column="id"    />
+        <result property="process"    column="process"    />
+        <result property="description"    column="description"    />
+    </resultMap>
+
+    <sql id="selectJhcnProcessVo">
+        select id, process, description from jhcn_process
+    </sql>
+
+    <select id="selectJhcnProcessList" parameterType="JhcnProcess" resultMap="JhcnProcessResult">
+        <include refid="selectJhcnProcessVo"/>
+        <where>
+            <if test="process != null  and process != ''"> and process like concat('%', #{process}, '%')</if>
+        </where>
+        order by process asc
+    </select>
+
+    <select id="selectJhcnProcessById" parameterType="Long" resultMap="JhcnProcessResult">
+        <include refid="selectJhcnProcessVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectJhcnProcessByProcess" parameterType="String" resultMap="JhcnProcessResult">
+        select * from jhcn_process where process = #{process}
+    </select>
+
+    <insert id="insertJhcnProcess" parameterType="JhcnProcess" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="process != null and process != ''">process,</if>
+            <if test="description != null and description != ''">description,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="process != null and process != ''">#{process},</if>
+            <if test="description != null and description != ''">#{description},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnProcess" parameterType="JhcnProcess">
+        update jhcn_process
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="process != null and process != ''">process = #{process},</if>
+            <if test="description != null and description != ''">description = #{description},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnProcessById" parameterType="Long">
+        delete from jhcn_process where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnProcessByIds" parameterType="String">
+        delete from jhcn_process where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
