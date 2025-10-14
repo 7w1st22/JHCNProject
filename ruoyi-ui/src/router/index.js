@@ -78,6 +78,13 @@ export const constantRoutes = [
     meta: { title: '江海34进制转换计算', requiresAuth: false }
   },
   {
+    path: '/crypto',
+    component: () => import('@/views/crypto/index'),
+    hidden: true, // 不在侧边栏显示
+    name: 'CryptoChef',
+    meta: { title: '加密解密工具箱', requiresAuth: false }
+  },
+  {
     path: '',
     component: Layout,
     redirect: 'index',
