@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnItsmAdeskMapper">
+
+    <resultMap type="JhcnItsmAdesk" id="JhcnItsmAdeskResult">
+        <result property="id"    column="id"    />
+        <result property="itsmName"    column="itsm_name"    />
+        <result property="createUsername"    column="create_username"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="applyUsername"    column="apply_username"    />
+        <result property="applyNo"    column="apply_no"    />
+        <result property="applyDeptId"    column="apply_dept_id"    />
+        <result property="demandAdesk"    column="demand_adesk"    />
+        <result property="demandAdeskAnyshare"    column="demand_adesk_anyshare"    />
+        <result property="demandAdeskIpguard"    column="demand_adesk_ipguard"    />
+        <result property="demandOa"    column="demand_oa"    />
+        <result property="demandOaPhone"    column="demand_oa_phone"    />
+        <result property="demandMail"    column="demand_mail"    />
+        <result property="demandMailJob"    column="demand_mail_job"    />
+        <result property="demandMailPre"    column="demand_mail_pre"    />
+        <result property="demandPrinter"    column="demand_printer"    />
+        <result property="demandPrinterLarge"    column="demand_printer_large"    />
+        <result property="demandPrinterSmall"    column="demand_printer_small"    />
+        <result property="demandPrinterMz"    column="demand_printer_mz"    />
+        <result property="demandPrinterOther"    column="demand_printer_other"    />
+        <result property="demandPrinterOtherInfo"    column="demand_printer_other_info"    />
+        <result property="demandSap"    column="demand_sap"    />
+        <result property="demandSapNumber"    column="demand_sap_number"    />
+        <result property="demandSapNumberInfo"    column="demand_sap_number_info"    />
+        <result property="demandWechatUpdate"    column="demand_wechat_update"    />
+        <result property="demandWpsSet"    column="demand_wps_set"    />
+        <result property="demandOther"    column="demand_other"    />
+    </resultMap>
+
+    <sql id="selectJhcnItsmAdeskVo">
+        select id, itsm_name, create_username, create_time, apply_username, apply_no, apply_dept_id, demand_adesk, demand_adesk_anyshare, demand_adesk_ipguard, demand_oa, demand_oa_phone, demand_mail, demand_mail_job, demand_mail_pre, demand_printer, demand_printer_large, demand_printer_small, demand_printer_mz, demand_printer_other, demand_sap, demand_sap_number, demand_sap_number_info, demand_wechat_update, demand_wps_set, demand_other, demand_printer_other_info from jhcn_itsm_adesk
+    </sql>
+
+    <select id="selectJhcnItsmAdeskList" parameterType="JhcnItsmAdesk" resultMap="JhcnItsmAdeskResult">
+        <include refid="selectJhcnItsmAdeskVo"/>
+        <where>
+            <if test="itsmName != null  and itsmName != ''"> and itsm_name like concat('%', #{itsmName}, '%')</if>
+            <if test="createUsername != null  and createUsername != ''"> and create_username like concat('%', #{createUsername}, '%')</if>
+            <if test="applyUsername != null  and applyUsername != ''"> and apply_username like concat('%', #{applyUsername}, '%')</if>
+            <if test="applyNo != null  and applyNo != ''"> and apply_no = #{applyNo}</if>
+            <if test="applyDeptId != null "> and apply_dept_id = #{applyDeptId}</if>
+            <if test="demandAdesk != null  and demandAdesk != ''"> and demand_adesk = #{demandAdesk}</if>
+            <if test="demandAdeskAnyshare != null  and demandAdeskAnyshare != ''"> and demand_adesk_anyshare = #{demandAdeskAnyshare}</if>
+            <if test="demandAdeskIpguard != null  and demandAdeskIpguard != ''"> and demand_adesk_ipguard = #{demandAdeskIpguard}</if>
+            <if test="demandOa != null  and demandOa != ''"> and demand_oa = #{demandOa}</if>
+            <if test="demandOaPhone != null  and demandOaPhone != ''"> and demand_oa_phone = #{demandOaPhone}</if>
+            <if test="demandMail != null  and demandMail != ''"> and demand_mail = #{demandMail}</if>
+            <if test="demandMailJob != null  and demandMailJob != ''"> and demand_mail_job = #{demandMailJob}</if>
+            <if test="demandMailPre != null  and demandMailPre != ''"> and demand_mail_pre = #{demandMailPre}</if>
+            <if test="demandPrinter != null  and demandPrinter != ''"> and demand_printer = #{demandPrinter}</if>
+            <if test="demandPrinterLarge != null  and demandPrinterLarge != ''"> and demand_printer_large = #{demandPrinterLarge}</if>
+            <if test="demandPrinterSmall != null  and demandPrinterSmall != ''"> and demand_printer_small = #{demandPrinterSmall}</if>
+            <if test="demandPrinterMz != null  and demandPrinterMz != ''"> and demand_printer_mz = #{demandPrinterMz}</if>
+            <if test="demandPrinterOther != null  and demandPrinterOther != ''"> and demand_printer_other = #{demandPrinterOther}</if>
+            <if test="demandSap != null  and demandSap != ''"> and demand_sap = #{demandSap}</if>
+            <if test="demandSapNumber != null  and demandSapNumber != ''"> and demand_sap_number = #{demandSapNumber}</if>
+            <if test="demandSapNumberInfo != null  and demandSapNumberInfo != ''"> and demand_sap_number_info = #{demandSapNumberInfo}</if>
+            <if test="demandWechatUpdate != null  and demandWechatUpdate != ''"> and demand_wechat_update = #{demandWechatUpdate}</if>
+            <if test="demandWpsSet != null  and demandWpsSet != ''"> and demand_wps_set = #{demandWpsSet}</if>
+            <if test="demandOther != null  and demandOther != ''"> and demand_other = #{demandOther}</if>
+        </where>
+    </select>
+
+    <select id="selectJhcnItsmAdeskById" parameterType="Long" resultMap="JhcnItsmAdeskResult">
+        <include refid="selectJhcnItsmAdeskVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertJhcnItsmAdesk" parameterType="JhcnItsmAdesk" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_itsm_adesk
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="itsmName != null">itsm_name,</if>
+            <if test="createUsername != null and createUsername != ''">create_username,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="applyUsername != null and applyUsername != ''">apply_username,</if>
+            <if test="applyNo != null and applyNo != ''">apply_no,</if>
+            <if test="applyDeptId != null">apply_dept_id,</if>
+            <if test="demandAdesk != null">demand_adesk,</if>
+            <if test="demandAdeskAnyshare != null">demand_adesk_anyshare,</if>
+            <if test="demandAdeskIpguard != null">demand_adesk_ipguard,</if>
+            <if test="demandOa != null">demand_oa,</if>
+            <if test="demandOaPhone != null">demand_oa_phone,</if>
+            <if test="demandMail != null">demand_mail,</if>
+            <if test="demandMailJob != null">demand_mail_job,</if>
+            <if test="demandMailPre != null">demand_mail_pre,</if>
+            <if test="demandPrinter != null">demand_printer,</if>
+            <if test="demandPrinterLarge != null">demand_printer_large,</if>
+            <if test="demandPrinterSmall != null">demand_printer_small,</if>
+            <if test="demandPrinterMz != null">demand_printer_mz,</if>
+            <if test="demandPrinterOther != null">demand_printer_other,</if>
+            <if test="demandPrinterOtherInfo != null">demand_printer_other_info,</if>
+            <if test="demandSap != null">demand_sap,</if>
+            <if test="demandSapNumber != null">demand_sap_number,</if>
+            <if test="demandSapNumberInfo != null">demand_sap_number_info,</if>
+            <if test="demandWechatUpdate != null">demand_wechat_update,</if>
+            <if test="demandWpsSet != null">demand_wps_set,</if>
+            <if test="demandOther != null">demand_other,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="itsmName != null">#{itsmName},</if>
+            <if test="createUsername != null and createUsername != ''">#{createUsername},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="applyUsername != null and applyUsername != ''">#{applyUsername},</if>
+            <if test="applyNo != null and applyNo != ''">#{applyNo},</if>
+            <if test="applyDeptId != null">#{applyDeptId},</if>
+            <if test="demandAdesk != null">#{demandAdesk},</if>
+            <if test="demandAdeskAnyshare != null">#{demandAdeskAnyshare},</if>
+            <if test="demandAdeskIpguard != null">#{demandAdeskIpguard},</if>
+            <if test="demandOa != null">#{demandOa},</if>
+            <if test="demandOaPhone != null">#{demandOaPhone},</if>
+            <if test="demandMail != null">#{demandMail},</if>
+            <if test="demandMailJob != null">#{demandMailJob},</if>
+            <if test="demandMailPre != null">#{demandMailPre},</if>
+            <if test="demandPrinter != null">#{demandPrinter},</if>
+            <if test="demandPrinterLarge != null">#{demandPrinterLarge},</if>
+            <if test="demandPrinterSmall != null">#{demandPrinterSmall},</if>
+            <if test="demandPrinterMz != null">#{demandPrinterMz},</if>
+            <if test="demandPrinterOther != null">#{demandPrinterOther},</if>
+            <if test="demandPrinterOtherInfo != null">#{demandPrinterOtherInfo},</if>
+            <if test="demandSap != null">#{demandSap},</if>
+            <if test="demandSapNumber != null">#{demandSapNumber},</if>
+            <if test="demandSapNumberInfo != null">#{demandSapNumberInfo},</if>
+            <if test="demandWechatUpdate != null">#{demandWechatUpdate},</if>
+            <if test="demandWpsSet != null">#{demandWpsSet},</if>
+            <if test="demandOther != null">#{demandOther},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnItsmAdesk" parameterType="JhcnItsmAdesk">
+        update jhcn_itsm_adesk
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="itsmName != null">itsm_name = #{itsmName},</if>
+            <if test="createUsername != null and createUsername != ''">create_username = #{createUsername},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="applyUsername != null and applyUsername != ''">apply_username = #{applyUsername},</if>
+            <if test="applyNo != null and applyNo != ''">apply_no = #{applyNo},</if>
+            <if test="applyDeptId != null">apply_dept_id = #{applyDeptId},</if>
+            <if test="demandAdesk != null">demand_adesk = #{demandAdesk},</if>
+            <if test="demandAdeskAnyshare != null">demand_adesk_anyshare = #{demandAdeskAnyshare},</if>
+            <if test="demandAdeskIpguard != null">demand_adesk_ipguard = #{demandAdeskIpguard},</if>
+            <if test="demandOa != null">demand_oa = #{demandOa},</if>
+            <if test="demandOaPhone != null">demand_oa_phone = #{demandOaPhone},</if>
+            <if test="demandMail != null">demand_mail = #{demandMail},</if>
+            <if test="demandMailJob != null">demand_mail_job = #{demandMailJob},</if>
+            <if test="demandMailPre != null">demand_mail_pre = #{demandMailPre},</if>
+            <if test="demandPrinter != null">demand_printer = #{demandPrinter},</if>
+            <if test="demandPrinterLarge != null">demand_printer_large = #{demandPrinterLarge},</if>
+            <if test="demandPrinterSmall != null">demand_printer_small = #{demandPrinterSmall},</if>
+            <if test="demandPrinterMz != null">demand_printer_mz = #{demandPrinterMz},</if>
+            <if test="demandPrinterOther != null">demand_printer_other = #{demandPrinterOther},</if>
+            <if test="demandPrinterOtherInfo != null">demand_printer_other_info = #{demandPrinterOtherInfo},</if>
+            <if test="demandSap != null">demand_sap = #{demandSap},</if>
+            <if test="demandSapNumber != null">demand_sap_number = #{demandSapNumber},</if>
+            <if test="demandSapNumberInfo != null">demand_sap_number_info = #{demandSapNumberInfo},</if>
+            <if test="demandWechatUpdate != null">demand_wechat_update = #{demandWechatUpdate},</if>
+            <if test="demandWpsSet != null">demand_wps_set = #{demandWpsSet},</if>
+            <if test="demandOther != null">demand_other = #{demandOther},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnItsmAdeskById" parameterType="Long">
+        delete from jhcn_itsm_adesk where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnItsmAdeskByIds" parameterType="String">
+        delete from jhcn_itsm_adesk where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

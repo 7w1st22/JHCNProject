@@ -115,6 +115,66 @@ export const constantRoutes = [
 
 // 动态路由，基于用户权限动态去加载
 export const dynamicRoutes = [
+  // 添加 adesk 相关路由 - 改为独立配置
+  {
+    path: '/system/adesk/index',
+    component: Layout,
+    permissions: ['system:adesk:list'],
+    meta: { title: 'IT工单管理', icon: 'form' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/system/adesk/index'),
+        name: 'Adesk',
+        meta: { title: 'IT工单管理', icon: 'form' }
+      }
+    ]
+  },
+  {
+    path: '/system/adesk/add',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:adesk:add'],
+    meta: { title: '新增IT工单', activeMenu: '/system/adesk/index' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/system/adesk/AdeskForm'),
+        name: 'AdeskAdd',
+        meta: { title: '新增IT工单', activeMenu: '/system/adesk/index' }
+      }
+    ]
+  },
+  {
+    path: '/system/adesk/edit/:id(\\d+)',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:adesk:edit'],
+    meta: { title: '修改IT工单', activeMenu: '/system/adesk/index' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/system/adesk/AdeskForm'),
+        name: 'AdeskEdit',
+        meta: { title: '修改IT工单', activeMenu: '/system/adesk/index' }
+      }
+    ]
+  },
+  {
+    path: '/system/adesk/detail/:id(\\d+)',
+    component: Layout,
+    hidden: true,
+    permissions: ['system:adesk:query'],
+    meta: { title: 'IT工单详情', activeMenu: '/system/adesk/index' },
+    children: [
+      {
+        path: '',
+        component: () => import('@/views/system/adesk/AdeskForm'),
+        name: 'AdeskDetail',
+        meta: { title: 'IT工单详情', activeMenu: '/system/adesk/index' }
+      }
+    ]
+  },
   {
     path: '/system/user-auth',
     component: Layout,
