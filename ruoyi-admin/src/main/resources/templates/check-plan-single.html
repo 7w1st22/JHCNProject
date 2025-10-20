@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>检定计划执行提醒</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f1f1f1;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .info-item {
+            display: flex;
+            flex-direction: column;
+        }
+        .info-label {
+            font-size: 13px;
+            color: #7f8c8d;
+            margin-bottom: 5px;
+        }
+        .info-value {
+            font-size: 16px;
+            font-weight: 500;
+            color: #2c3e50;
+        }
+        .urgent-alert {
+            background-color: #fff5f5;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #ff5252;
+            margin-bottom: 20px;
+        }
+        .action-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff9800 0%, #ff5722 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f8f9fa;
+            color: #7f8c8d;
+            font-size: 13px;
+            border-top: 1px solid #eaeaea;
+        }
+        .today-badge {
+            display: inline-block;
+            background-color: #ff5252;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            margin-left: 10px;
+        }
+        @media (max-width: 600px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            .header {
+                padding: 20px 15px;
+            }
+            .content {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>检定计划执行提醒</h1>
+        <p th:text="'今日 (' + ${#dates.format(currentDate, 'yyyy年MM月dd日')} + ') 需执行的检定计划'">
+            今日需执行的检定计划
+        </p>
+    </div>
+
+    <div class="content">
+        <div class="urgent-alert">
+            <p><strong>重要提醒：</strong>以下检定计划需在今日完成，请相关责任人及时处理。</p>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">计划基本信息</h2>
+            <div class="info-grid">
+                <div class="info-item">
+                    <span class="info-label">设备编号</span>
+                    <span class="info-value" th:text="${plan.deviceNo}">设备编号</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">设备名称</span>
+                    <span class="info-value" th:text="${plan.deviceName}">设备名称</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">机台编号</span>
+                    <span class="info-value" th:text="${plan.jtNo}">机台编号</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">设备型号</span>
+                    <span class="info-value" th:text="${plan.deviceType}">设备型号</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">所属公司</span>
+                    <span class="info-value" th:text="${plan.company}">所属公司</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">检定时间</span>
+                    <span class="info-value">
+                        <span th:text="${#dates.format(plan.maintanceDate, 'yyyy年MM月dd日')}">检定时间</span>
+                        <span class="today-badge">今日执行</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">检定详情</h2>
+            <div class="info-item">
+                <span class="info-label">工序/流程</span>
+                <span class="info-value" th:text="${plan.process}">工序/流程</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">操作指引</h2>
+            <p>请按照设备检定手册执行相应的检定操作，完成后请及时在系统中更新检定状态。</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        <p>此邮件由设备管理系统自动生成，请勿直接回复</p>
+        <p>生成时间：<span th:text="${#dates.format(currentDate, 'yyyy年MM月dd日 HH:mm:ss')}">当前时间</span></p>
+        <p>如有疑问，请联系系统管理员</p>
+        <p>© 2025 设备管理系统. 版权所有.</p>
+    </div>
+</div>
+</body>
+</html>

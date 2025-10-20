@@ -1,6 +1,7 @@
 package com.ruoyi.quartz.task;
 
 import com.ruoyi.common.utils.EmailUtil;
+import com.ruoyi.quartz.domain.CheckPlan;
 import com.ruoyi.quartz.domain.EmailUser;
 import com.ruoyi.quartz.domain.MaintenancePlan;
 import com.ruoyi.quartz.mapper.EmailUserMapper;
@@ -60,7 +61,33 @@ public class PlanScheduleTask {
             }
         }
         if(type.equals("check")){
-            System.out.println("设备编号："+deviceNo+"的巡检任务已开始");
+            // 这里需要添加检定计划的相关查询和邮件发送逻辑
+            // 由于缺少检定计划的mapper，暂时先打印日志
+            // 后续可以添加类似维护计划的邮件发送功能
+
+            // 获取当前日期
+            Date currentDate = new Date();
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("deviceNo", deviceNo);
+            variables.put("jtNo", jtNo);
+            variables.put("currentDate", currentDate);
+
+            List<EmailUser> whjh = emailUserMapper.selectEmailUserList("whjh");
+            for (EmailUser emailUser : whjh){
+                if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                    try{
+                        emailUtil.sendTemplateEmail(
+                                "设备编号："+deviceNo+"的检定计划已开始",  // 标题
+                                "maintenance-plan-single",  // 暂时使用维护计划模板
+                                variables,
+                                emailUser.getEmail()
+                        );
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -127,6 +154,82 @@ public class PlanScheduleTask {
                             emailUtil.sendTemplateEmail(
                                     "设备编号："+plan.getDeviceNo()+"的维护计划已开始",  // 标题
                                     "maintenance-plan-single",
+                                    variables,
+                                    emailUser.getEmail()
+                            );
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 下月检定计划提醒
+     */
+    public void checkNextMonthCheckPlan() {
+        // 下个月所有维护计划
+        List<CheckPlan> plans = planMapper.selectCheckPlanListByMonth();
+        // 计算下个月份信息
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, 1);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH) + 1; // 月份从0开始，需要+1
+        // 格式化月份显示
+        String nextMonthDisplay = year + "年" + month + "月";
+        String nextMonthForQuery = year + "-" + String.format("%02d", month);
+
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("plans", plans);
+        variables.put("nextMonthDisplay", nextMonthDisplay);
+        variables.put("nextMonthForQuery", nextMonthForQuery);
+        variables.put("nextYear", year);
+        variables.put("nextMonth", month);
+
+        List<EmailUser> whjh = emailUserMapper.selectEmailUserList("jdjh");
+        for (EmailUser emailUser : whjh){
+            if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                try{
+                    emailUtil.sendTemplateEmail(
+                            nextMonthDisplay + "检定计划提醒",  // 动态标题
+                            "check-plan-email",
+                            variables,
+                            emailUser.getEmail()
+                    );
+                }catch(Exception e){
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    /**
+     * 每日检定计划
+     * @throws MessagingException
+     */
+    public void checkNextDayCheck(){
+        // 当日所有维护计划
+        List<CheckPlan> plans = planMapper.selectCheckPlanListToday();
+
+        if(!plans.isEmpty()){
+            // 获取当前日期
+            Date currentDate = new Date();
+            for(CheckPlan plan:plans){
+                Map<String, Object> variables = new HashMap<>();
+                variables.put("plan", plan);
+                variables.put("currentDate", currentDate);
+
+                List<EmailUser> whjh = emailUserMapper.selectEmailUserList("jdjh");
+                for (EmailUser emailUser : whjh){
+                    if(emailUser.getEmail()!=null&&!emailUser.getEmail().equals("")){
+                        try{
+                            emailUtil.sendTemplateEmail(
+                                    "设备编号："+plan.getDeviceNo()+"的检定计划已开始",  // 标题
+                                    "check-plan-single",
                                     variables,
                                     emailUser.getEmail()
                             );

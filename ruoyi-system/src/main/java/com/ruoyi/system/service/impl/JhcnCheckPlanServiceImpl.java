@@ -120,7 +120,6 @@ public class JhcnCheckPlanServiceImpl implements IJhcnCheckPlanService
                 {
                     BeanValidators.validateWithException(validator, plan);
                     jhcnCheckPlanMapper.insertJhcnCheckPlan(plan);
-                    System.out.println("新增一条");
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、 检定计划 " +plan.getDeviceNo() + " 导入成功");
                 }
@@ -147,5 +146,10 @@ public class JhcnCheckPlanServiceImpl implements IJhcnCheckPlanService
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+    @Override
+    public int changeAlarmStatus(JhcnCheckPlan jhcnCheckPlan) {
+        return 0;
     }
 }

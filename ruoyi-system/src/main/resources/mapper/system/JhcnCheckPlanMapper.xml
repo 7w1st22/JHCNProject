@@ -14,10 +14,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="checkDate"    column="check_date"    />
         <result property="process"    column="process"    />
         <result property="checkType"    column="check_type"    />
+        <result property="alarm"    column="alarm"    />
     </resultMap>
 
     <sql id="selectJhcnCheckPlanVo">
-        select id, device_no, jt_no, device_name, device_type, company, check_date, process, check_type from jhcn_check_plan
+        select id, device_no, jt_no, device_name, device_type, company, check_date, process, check_type, alarm from jhcn_check_plan
     </sql>
 
     <select id="selectJhcnCheckPlanList" parameterType="JhcnCheckPlan" resultMap="JhcnCheckPlanResult">
@@ -31,6 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkDate != null "> and check_date = #{checkDate}</if>
             <if test="process != null  and process != ''"> and process = #{process}</if>
             <if test="checkType != null  and checkType != ''"> and check_type = #{checkType}</if>
+            <if test="alarm != null  and alarm != ''"> and alarm = #{alarm}</if>
         </where>
     </select>
 
@@ -44,6 +46,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where device_no = #{deviceNo}
     </select>
 
+    <select id="selectJhcnCheckPlanByDeviceNoAndJtNo" resultMap="JhcnCheckPlanResult">
+        <include refid="selectJhcnCheckPlanVo"/>
+        where device_no = #{deviceNo} and jt_no = #{jtNo}
+    </select>
+
     <insert id="insertJhcnCheckPlan" parameterType="JhcnCheckPlan" useGeneratedKeys="true" keyProperty="id">
         insert into jhcn_check_plan
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -55,6 +62,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkDate != null">check_date,</if>
             <if test="process != null">process,</if>
             <if test="checkType != null">check_type,</if>
+            <if test="alarm != null">alarm,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="deviceNo != null">#{deviceNo},</if>
@@ -65,6 +73,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkDate != null">#{checkDate},</if>
             <if test="process != null">#{process},</if>
             <if test="checkType != null">#{checkType},</if>
+            <if test="alarm != null">#{alarm},</if>
          </trim>
     </insert>
 
@@ -79,6 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="checkDate != null">check_date = #{checkDate},</if>
             <if test="process != null">process = #{process},</if>
             <if test="checkType != null">check_type = #{checkType},</if>
+            <if test="alarm != null">alarm = #{alarm},</if>
         </trim>
         where id = #{id}
     </update>

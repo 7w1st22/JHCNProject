@@ -109,12 +109,17 @@
       <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="型号" align="center" prop="deviceType" />
       <el-table-column label="厂家" align="center" prop="company" />
-      <el-table-column label="计划检定日期" align="center" prop="checkDate" width="180">
+      <el-table-column label="检定日期" align="center" prop="checkDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.checkDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
       <el-table-column label="工序" align="center" prop="process" />
+      <el-table-column label="当日提醒" align="center" key="alarm">
+        <template slot-scope="scope">
+          <el-switch v-model="scope.row.alarm" active-value="1" inactive-value="0" @change="handleStatusChange(scope.row)"></el-switch>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -158,12 +163,12 @@
         <el-form-item label="厂家" prop="company">
           <el-input v-model="form.company" placeholder="请输入厂家" />
         </el-form-item>
-        <el-form-item label="计划检定日期" prop="checkDate">
+        <el-form-item label="检定日期" prop="checkDate">
           <el-date-picker clearable
             v-model="form.checkDate"
             type="date"
             value-format="yyyy-MM-dd"
-            placeholder="请选择计划检定日期">
+            placeholder="请选择检定日期">
           </el-date-picker>
         </el-form-item>
         <el-form-item label="检定类型" prop="checkType">
@@ -174,6 +179,10 @@
         </el-form-item>
         <el-form-item label="工序" prop="process">
           <el-input v-model="form.process" placeholder="请输入工序" />
+        </el-form-item>
+        <el-form-item label="提醒" prop="alarm" >
+          <el-switch v-model="form.alarm" active-color="#33FF00" inactive-color="#EE1616"
+                     :active-value="'1'" :inactive-value="'0'"></el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -213,7 +222,7 @@
 </template>
 
 <script>
-import { listPlan, getPlan, delPlan, addPlan, updatePlan } from "@/api/system/plan";
+import { listPlan, getPlan, delPlan, addPlan, updatePlan, exportPlan, changeAlarmStatus } from "@/api/system/plan";
 import { getToken } from "@/utils/auth";
 
 export default {
@@ -314,7 +323,10 @@ export default {
         deviceType: null,
         company: null,
         checkDate: null,
-        process: null
+        process: null,
+        checkType: null,
+        alarm: "0",
+        reminded: 0
       };
       this.resetForm("form");
     },
@@ -415,6 +427,18 @@ export default {
     // 提交上传文件
     submitFileForm() {
       this.$refs.upload.submit();
+    },
+
+    // 状态修改
+    handleStatusChange(row) {
+      let text = row.alarm === "1" ? "启用" : "停用";
+      this.$modal.confirm('确认要"' + text + '"提醒吗？').then(function() {
+        return changeAlarmStatus(row.id, row.alarm);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+      }).catch(function() {
+        row.alarm = row.alarm === "1" ? "0" : "1";
+      });
     }
   }
 };

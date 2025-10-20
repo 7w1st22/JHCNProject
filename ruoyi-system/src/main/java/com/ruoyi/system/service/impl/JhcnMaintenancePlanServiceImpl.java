@@ -71,9 +71,9 @@ public class JhcnMaintenancePlanServiceImpl implements IJhcnMaintenancePlanServi
     @Override
     public int insertJhcnMaintenancePlan(JhcnMaintenancePlan jhcnMaintenancePlan) throws SchedulerException, TaskException {
         int result = jhcnMaintenancePlanMapper.insertJhcnMaintenancePlan(jhcnMaintenancePlan);
-        if(result>0 && jhcnMaintenancePlan.getReminded()==1){
-            addScheduleJob(jhcnMaintenancePlan);
-        }
+//        if(result>0 && jhcnMaintenancePlan.getReminded()==1){
+//            addScheduleJob(jhcnMaintenancePlan);
+//        }
         return result;
 
     }
@@ -165,7 +165,7 @@ public class JhcnMaintenancePlanServiceImpl implements IJhcnMaintenancePlanServi
                 {
                     BeanValidators.validateWithException(validator, plan);
                     // 导入的开启通知
-                    plan.setReminded(1);
+//                    plan.setReminded(1);
                     insertJhcnMaintenancePlan(plan);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、 维护计划 " +plan.getDeviceNo() + " 导入成功");

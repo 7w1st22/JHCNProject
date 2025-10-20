@@ -42,3 +42,16 @@ export function delPlan(id) {
     method: 'delete'
   })
 }
+
+// 改变提醒状态
+export function changeAlarmStatus(id, alarm) {
+  const data = {
+    id,
+    alarm
+  }
+  return request({
+    url: '/system/plan/changeStatus',
+    method: 'put',
+    data: data
+  })
+}

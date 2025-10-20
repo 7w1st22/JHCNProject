@@ -61,4 +61,12 @@ public interface IJhcnCheckPlanService
     public int deleteJhcnCheckPlanById(Long id);
 
     public String importList(List<JhcnCheckPlan> checkList, Boolean updateSupport, String operName);
+
+    /**
+     * 改变提醒状态
+     *
+     * @param jhcnCheckPlan 检查计划
+     * @return 结果
+     */
+    public int changeAlarmStatus(JhcnCheckPlan jhcnCheckPlan);
 }

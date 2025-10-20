@@ -53,6 +53,27 @@ public class JhcnCheckPlan extends BaseEntity
     @Excel(name = "检定类型(内校=1，外校=2)")
     private String checkType;
 
+    /** 提醒 0 关闭 1 开启 **/
+    private String alarm;
+
+    private int reminded;
+
+    public String getAlarm() {
+        return alarm;
+    }
+
+    public void setAlarm(String alarm) {
+        this.alarm = alarm;
+    }
+
+    public int getReminded() {
+        return reminded;
+    }
+
+    public void setReminded(int reminded) {
+        this.reminded = reminded;
+    }
+
     public String getCheckType() {
         return checkType;
     }
@@ -152,6 +173,9 @@ public class JhcnCheckPlan extends BaseEntity
             .append("company", getCompany())
             .append("checkDate", getCheckDate())
             .append("process", getProcess())
+            .append("checkType", getCheckType())
+            .append("alarm", getAlarm())
+            .append("reminded", getReminded())
             .toString();
     }
 }

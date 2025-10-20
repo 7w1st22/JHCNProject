@@ -106,6 +106,22 @@ public class JhcnCheckPlanController extends BaseController
         return toAjax(jhcnCheckPlanService.deleteJhcnCheckPlanByIds(ids));
     }
 
+    /**
+     * 修改计划当日提醒状态
+     */
+    @PutMapping("/changeStatus")
+    public AjaxResult changeStatus(@RequestBody JhcnCheckPlan plan)
+    {
+        JhcnCheckPlan model = jhcnCheckPlanService.selectJhcnCheckPlanById(plan.getId());
+        if(model!=null){
+            model.setAlarm(plan.getAlarm());
+            return toAjax(jhcnCheckPlanService.updateJhcnCheckPlan(model));
+        }else{
+            return error("计划不存在");
+        }
+
+    }
+
     @PreAuthorize("@ss.hasPermi('system:plan:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)

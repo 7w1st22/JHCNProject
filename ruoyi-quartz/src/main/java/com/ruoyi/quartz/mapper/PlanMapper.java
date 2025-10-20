@@ -13,4 +13,12 @@ public interface PlanMapper {
     public List<MaintenancePlan> selectMaintenancePlanListToday();
 //    public List<CheckPlan> selectCheckPlanListByMonth(JhcnMaintenancePlan jhcnMaintenancePlan);
     public MaintenancePlan selectMaintanceDateByDeviceNoAndJtNo(@Param("deviceNo") String deviceNo, @Param("jtNo") String jtNo);
+
+    public List<CheckPlan> selectCheckPlanListByMonth();
+
+    public List<CheckPlan> selectCheckPlanListToday();
+    //    public List<CheckPlan> selectCheckPlanListByMonth(JhcnMaintenancePlan jhcnMaintenancePlan);
+    public CheckPlan selectCheckPlanDateByDeviceNoAndJtNo(@Param("deviceNo") String deviceNo, @Param("jtNo") String jtNo);
+
+
 }

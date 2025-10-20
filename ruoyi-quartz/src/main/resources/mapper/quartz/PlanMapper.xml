@@ -41,4 +41,30 @@
     </select>
 
 
+    <resultMap type="JhcnCheckPlan" id="JhcnCheckPlanResult">
+        <result property="id"    column="id"    />
+        <result property="deviceNo"    column="device_no"    />
+        <result property="jtNo"    column="jt_no"    />
+        <result property="deviceName"    column="device_name"    />
+        <result property="deviceType"    column="device_type"    />
+        <result property="company"    column="company"    />
+        <result property="checkDate"    column="check_date"    />
+        <result property="process"    column="process"    />
+        <result property="checkType"    column="check_type"    />
+        <result property="alarm"    column="alarm"    />
+    </resultMap>
+
+    <sql id="selectJhcnCheckPlanVo">
+        select id, device_no, jt_no, device_name, device_type, company, check_date, process, check_type from jhcn_check_plan
+    </sql>
+
+    <select id="selectCheckPlanListByMonth" resultType="com.ruoyi.quartz.domain.CheckPlan">
+        select id, device_no, jt_no, device_name, device_type, company, check_date, process, check_type from jhcn_maintenance_plan
+        WHERE
+            DATE_FORMAT(maintance_date, '%Y-%m') = DATE_FORMAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), '%Y-%m')
+          and alarm = '1'
+        order by maintance_date ASC
+    </select>
+
+
 </mapper>

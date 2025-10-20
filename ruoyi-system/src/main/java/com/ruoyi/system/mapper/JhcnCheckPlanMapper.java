@@ -2,6 +2,7 @@ package com.ruoyi.system.mapper;
 
 import java.util.List;
 import com.ruoyi.system.domain.JhcnCheckPlan;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 检查计划Mapper接口
@@ -60,4 +61,6 @@ public interface JhcnCheckPlanMapper
     public int deleteJhcnCheckPlanByIds(Long[] ids);
 
     JhcnCheckPlan selectJhcnCheckPlanByDeviceNo(String deviceNo);
+
+    JhcnCheckPlan selectJhcnCheckPlanByDeviceNoAndJtNo(@Param("deviceNo") String deviceNo, @Param("jtNo") String jtNo);
 }
