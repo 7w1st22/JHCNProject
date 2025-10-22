@@ -81,7 +81,6 @@
 
     <el-table v-loading="loading" :data="edlcSpecificationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="${comment}" align="center" prop="id" />
       <el-table-column label="规格" align="center" prop="specification" />
       <el-table-column label="电极样式" align="center" prop="type">
         <template slot-scope="scope">
@@ -109,7 +108,7 @@
         </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"

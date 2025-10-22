@@ -10,33 +10,34 @@
 
         <!-- 基本信息 -->
         <el-divider content-position="left">基本信息</el-divider>
-        <el-row :gutter="20">
-          <el-col :span="6">
+        <el-row :gutter="24">
+          <el-col :span="8">
             <el-form-item label="工单名" prop="itsmName">
               <el-input v-model="form.itsmName" placeholder="自动生成" :disabled="true"/>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+          <el-col :span="8">
             <el-form-item label="填写人姓名" prop="createUsername">
               <el-input v-model="form.createUsername" placeholder="请输入填写人姓名" :disabled="isDetail"/>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+        </el-row>
+
+        <el-row :gutter="24">
+          <el-col :span="8">
             <el-form-item label="申请人姓名" prop="applyUsername">
               <el-input v-model="form.applyUsername" placeholder="请输入申请人姓名" :disabled="isDetail"/>
             </el-form-item>
           </el-col>
-
-
-        </el-row>
-
-        <el-row :gutter="20">
-          <el-col :span="6">
+          <el-col :span="8">
             <el-form-item label="申请人工号" prop="applyNo">
               <el-input v-model="form.applyNo" placeholder="请输入申请人工号" :disabled="isDetail"/>
             </el-form-item>
           </el-col>
-          <el-col :span="6">
+        </el-row>
+
+        <el-row>
+          <el-col :span="9">
             <el-form-item label="申请人部门" prop="applyDeptId">
               <treeselect v-model="form.applyDeptId" :options="deptOptions" :show-count="true" placeholder="请选择申请人归属部门" :disabled="isDetail"/>
             </el-form-item>
@@ -101,7 +102,7 @@
         </el-row>
 
         <el-row :gutter="20" v-if="form.demandMailChecked">
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="岗位" prop="demandMailJob">
               <el-input v-model="form.demandMailJob" placeholder="请输入岗位" :disabled="isDetail"/>
             </el-form-item>
@@ -172,7 +173,7 @@
           </el-col>
         </el-row>
 
-        <el-row :gutter="20" v-if="form.demandSapChecked">
+        <el-row :gutter="20" >
           <el-col :span="12">
             <el-form-item label="SAP账号新开" prop="demandSapNumber">
               <el-checkbox v-model="form.demandSapNumberChecked" :disabled="isDetail">需要SAP账号</el-checkbox>
