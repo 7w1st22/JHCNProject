@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.JhcnElectrodeSpecificationMapper">
+    
+    <resultMap type="JhcnElectrodeSpecification" id="JhcnElectrodeSpecificationResult">
+        <result property="id"    column="id"    />
+        <result property="specification"    column="specification"    />
+        <result property="type"    column="type"    />
+        <result property="testNum"    column="test_num"    />
+        <result property="specialSpecification"    column="special_specification"    />
+    </resultMap>
+
+    <sql id="selectJhcnElectrodeSpecificationVo">
+        select id, specification, type, test_num, special_specification from jhcn_electrode_specification
+    </sql>
+
+    <select id="selectJhcnElectrodeSpecificationList" parameterType="JhcnElectrodeSpecification" resultMap="JhcnElectrodeSpecificationResult">
+        <include refid="selectJhcnElectrodeSpecificationVo"/>
+        <where>  
+            <if test="specification != null  and specification != ''"> and specification like concat('%', #{specification}, '%')</if>
+            <if test="type != null  and type != ''"> and type = #{type}</if>
+            <if test="specialSpecification != null  and specialSpecification != ''"> and special_specification = #{specialSpecification}</if>
+        </where>
+    </select>
+    
+    <select id="selectJhcnElectrodeSpecificationById" parameterType="Long" resultMap="JhcnElectrodeSpecificationResult">
+        <include refid="selectJhcnElectrodeSpecificationVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertJhcnElectrodeSpecification" parameterType="JhcnElectrodeSpecification" useGeneratedKeys="true" keyProperty="id">
+        insert into jhcn_electrode_specification
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="specification != null and specification != ''">specification,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="testNum != null">test_num,</if>
+            <if test="specialSpecification != null">special_specification,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="specification != null and specification != ''">#{specification},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="testNum != null">#{testNum},</if>
+            <if test="specialSpecification != null">#{specialSpecification},</if>
+         </trim>
+    </insert>
+
+    <update id="updateJhcnElectrodeSpecification" parameterType="JhcnElectrodeSpecification">
+        update jhcn_electrode_specification
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="specification != null and specification != ''">specification = #{specification},</if>
+            <if test="type != null and type != ''">type = #{type},</if>
+            <if test="testNum != null">test_num = #{testNum},</if>
+            <if test="specialSpecification != null">special_specification = #{specialSpecification},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteJhcnElectrodeSpecificationById" parameterType="Long">
+        delete from jhcn_electrode_specification where id = #{id}
+    </delete>
+
+    <delete id="deleteJhcnElectrodeSpecificationByIds" parameterType="String">
+        delete from jhcn_electrode_specification where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
